@@ -33,7 +33,6 @@
             --sidebar-width: 280px;
             --navbar-height: 56px;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -43,120 +42,61 @@
             line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
-            padding-top: var(--navbar-height); /* space for fixed navbar */
+            padding-top: var(--navbar-height);
         }
 
         /* Fixed navbar */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--navbar-height);
-            background: var(--surface);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            gap: 12px;
+            top: 0; left: 0; width: 100%; height: var(--navbar-height);
+            background: var(--surface); box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            z-index: 1001; display: flex; align-items: center; padding: 0 20px; gap: 12px;
         }
         .navbar .menu-btn {
-            background: none;
-            border: none;
-            font-size: 1.4rem;
-            cursor: pointer;
-            color: var(--text);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            transition: background 0.2s;
+            background: none; border: none; font-size: 1.4rem; cursor: pointer;
+            color: var(--text); width: 40px; height: 40px; display: flex;
+            align-items: center; justify-content: center; border-radius: 10px; transition: background 0.2s;
         }
         .navbar .menu-btn:hover { background: rgba(0,0,0,0.05); }
         .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary);
-            text-decoration: none;
+            display: flex; align-items: center; gap: 8px; font-weight: 700;
+            font-size: 1.2rem; color: var(--primary); text-decoration: none;
         }
-        .navbar-brand i {
-            font-size: 1.4rem;
-            color: var(--accent);
-        }
+        .navbar-brand i { font-size: 1.4rem; color: var(--accent); }
 
         /* Sidebar */
         .sidebar {
-            position: fixed;
-            top: var(--navbar-height);
-            left: 0;
-            width: var(--sidebar-width);
-            height: calc(100vh - var(--navbar-height));
+            position: fixed; top: var(--navbar-height); left: 0;
+            width: var(--sidebar-width); height: calc(100vh - var(--navbar-height));
             background: linear-gradient(180deg, #1a1035 0%, #0d0820 100%);
-            color: #fff;
-            z-index: 1000;
-            overflow-y: auto;
+            color: #fff; z-index: 1000; overflow-y: auto;
             box-shadow: 4px 0 30px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            transform: translateX(0);
+            display: flex; flex-direction: column; transform: translateX(0);
         }
         .sidebar-header {
-            padding: 20px 20px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
+            padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center;
         }
         .sidebar-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 6px;
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px;
         }
         .sidebar-logo .icon-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
+            width: 44px; height: 44px; border-radius: 50%;
             background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
         }
         .sidebar-logo h2 {
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: 1.4rem; font-weight: 700;
             background: linear-gradient(135deg, #fff, #d4c5f9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .sidebar-subtitle { font-size: 0.75rem; color: rgba(255,255,255,0.55); }
-        .sidebar-nav {
-            flex: 1;
-            padding: 16px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
         .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            color: rgba(255,255,255,0.75);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px;
+            color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+            transition: all 0.2s; cursor: pointer;
         }
         .sidebar-nav a i { width: 20px; text-align: center; font-size: 1rem; }
         .sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; }
@@ -164,93 +104,54 @@
 
         /* Main area */
         .main-area {
-            display: flex;
-            margin-left: var(--sidebar-width);
-            min-height: calc(100vh - var(--navbar-height));
-            transition: margin-left 0.3s ease;
+            display: flex; margin-left: var(--sidebar-width);
+            min-height: calc(100vh - var(--navbar-height)); transition: margin-left 0.3s ease;
         }
         .content-wrapper {
-            flex: 1;
-            padding: 28px 32px 60px;
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
+            flex: 1; padding: 28px 32px 60px; max-width: 1100px; width: 100%; margin: 0 auto;
         }
 
-        /* Sections visibility */
-        .home-section, .diagram-section {
-            display: none;
-        }
-        .home-section.active, .diagram-section.active {
-            display: block;
-        }
+        /* Sections */
+        .home-section, .diagram-section { display: none; }
+        .home-section.active, .diagram-section.active { display: block; }
 
-        /* Home Section */
-        .home-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
+        /* Home */
+        .home-header { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
         .home-header .app-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
+            width: 80px; height: 80px; border-radius: 20px;
             background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: #fff;
-            box-shadow: 0 8px 24px rgba(108,60,224,0.4);
+            display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+            color: #fff; box-shadow: 0 8px 24px rgba(108,60,224,0.4);
         }
         .home-title h1 { font-size: 2rem; font-weight: 700; }
         .home-title p { font-size: 1rem; color: var(--text-light); max-width: 600px; margin-top: 8px; }
         .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-top: 32px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 32px;
         }
         .feature-card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
+            background: var(--surface); border-radius: var(--radius); padding: 20px;
+            box-shadow: var(--shadow); border: 1px solid var(--border); transition: transform 0.2s;
         }
         .feature-card:hover { transform: translateY(-4px); }
         .feature-icon {
-            width: 48px; height: 48px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; margin-bottom: 12px;
+            width: 48px; height: 48px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 12px;
         }
         .feature-card h3 { font-size: 1rem; margin-bottom: 6px; }
         .feature-card p { font-size: 0.85rem; color: var(--text-light); }
 
         /* Diagram cards */
         .diagram-card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            border: 1px solid var(--border);
+            background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+            overflow: hidden; border: 1px solid var(--border);
         }
         .diagram-card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-            background: #faf9fe;
-            cursor: pointer;
-            user-select: none;
+            display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+            border-bottom: 1px solid var(--border); background: #faf9fe; cursor: pointer; user-select: none;
         }
         .diagram-icon {
-            width: 38px; height: 38px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; flex-shrink: 0;
+            width: 38px; height: 38px; border-radius: 10px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
         }
         .icon-use-case { background: #ede9fe; color: #7c3aed; }
         .icon-class { background: #fce7f3; color: #db2777; }
@@ -269,13 +170,8 @@
         .collapse-arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--text-light); }
         .diagram-card.collapsed .collapse-arrow { transform: rotate(-90deg); }
         .diagram-card-body {
-            padding: 10px 6px 14px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            background: #fdfdfe;
-            min-height: 200px;
-            position: relative;
+            padding: 10px 6px 14px; overflow: hidden; display: flex; justify-content: center;
+            background: #fdfdfe; min-height: 200px; position: relative;
         }
         .diagram-card.collapsed .diagram-card-body { display: none; }
         .diagram-card-footer {
@@ -285,77 +181,57 @@
         }
         .diagram-card.collapsed .diagram-card-footer { display: none; }
 
-        /* Zoom/Pan container */
+        /* Zoom & Pan */
         .zoom-container {
-            width: 100%; height: 100%;
-            cursor: grab;
-            transform-origin: 0 0;
-            will-change: transform;
+            width: 100%; height: 100%; cursor: grab; transform-origin: 0 0;
+            will-change: transform; position: relative;
         }
+        .zoom-container svg { width: 100%; height: auto; display: block; }
         .zoom-container:active { cursor: grabbing; }
         .zoom-container.dragging { cursor: grabbing; }
 
-        /* Fullscreen modal */
+        /* Loading spinner */
+        .spinner-container {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 5; color: var(--primary); font-size: 2rem;
+        }
+        .spinner-container.hidden { display: none; }
+
+        /* Fullscreen */
         .fullscreen-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center;
         }
         .fullscreen-modal.active { display: flex; }
-        .fullscreen-modal .modal-content {
-            width: 90vw; height: 90vh;
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .modal-content {
+            width: 90vw; height: 90vh; background: #fff; border-radius: 12px;
+            overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center;
         }
         .modal-close {
             position: absolute; top: 16px; right: 16px; z-index: 10;
             width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff;
-            border: none; font-size: 1.2rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
-        .modal-zoom-controls {
-            position: absolute; bottom: 16px; right: 16px; z-index: 10;
-            display: flex; gap: 8px;
-        }
+        .modal-zoom-controls { position: absolute; bottom: 16px; right: 16px; z-index: 10; display: flex; gap: 8px; }
         .modal-zoom-controls button {
             width: 36px; height: 36px; border-radius: 50%; border: none;
             background: rgba(0,0,0,0.5); color: #fff; font-size: 1rem; cursor: pointer;
         }
 
-        /* Toast */
         .toast {
-            position: fixed; bottom: 20px; left: 50%;
-            transform: translateX(-50%) translateY(20px);
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
             background: #1a1035; color: #fff; padding: 10px 22px; border-radius: 24px;
             font-size: 0.85rem; font-weight: 500; z-index: 9999;
             opacity: 0; transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* Mobile */
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
+            .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
             .main-area { margin-left: 0; }
             .content-wrapper { padding: 20px 14px 40px; }
             .home-header { flex-direction: column; align-items: flex-start; }
-        }
-
-        @media print {
-            .navbar, .sidebar, .toast, .fullscreen-modal { display: none !important; }
-            .main-area { margin-left: 0; }
-            body { padding-top: 0; }
         }
     </style>
 </head>
@@ -363,22 +239,15 @@
 
     <!-- Fixed Navbar -->
     <nav class="navbar">
-        <button class="menu-btn" id="navbarMenuBtn" aria-label="Menu">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <a href="#" class="navbar-brand" id="homeLink">
-            <i class="fa-solid fa-hand-holding-heart"></i>
-            <span>SplitMate</span>
-        </a>
+        <button class="menu-btn" id="navbarMenuBtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <a href="#" class="navbar-brand" id="homeLink"><i class="fa-solid fa-hand-holding-heart"></i> SplitMate</a>
     </nav>
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
-                <div class="icon-circle">
-                    <i class="fa-solid fa-hand-holding-heart"></i>
-                </div>
+                <div class="icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div>
                 <h2>SplitMate</h2>
             </div>
             <p class="sidebar-subtitle">Documentation UML</p>
@@ -397,12 +266,10 @@
     <!-- Main Area -->
     <div class="main-area" id="mainArea">
         <div class="content-wrapper" id="contentWrapper">
-            <!-- Accueil Section (visible par défaut) -->
+            <!-- Accueil (visible par défaut) -->
             <section class="home-section active" id="home">
                 <div class="home-header">
-                    <div class="app-icon">
-                        <i class="fa-solid fa-hand-holding-heart"></i>
-                    </div>
+                    <div class="app-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
                     <div class="home-title">
                         <h1>SplitMate</h1>
                         <p>Application de partage equitable des frais entre amis, couples et groupes. Simplifiez les comptes communs avec un portefeuille partage et des propositions d'activites.</p>
@@ -415,51 +282,51 @@
                         <p>Ajoutez vos amis via un code de verification 2FA. Creez des espaces prives et partages.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon" style="background:#fce7f3; color:#db2777;"><i class="fa-solid fa-calculator"></i></div>
+                        <div class="feature-icon" style="background:#fce7f3;color:#db2777;"><i class="fa-solid fa-calculator"></i></div>
                         <h3>Division automatique</h3>
-                        <p>Chaque depense est divisee equitablement entre les membres du groupe. Visualisez qui doit combien.</p>
+                        <p>Chaque depense est divisee equitablement entre les membres du groupe.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon" style="background:#dbeafe; color:#2563eb;"><i class="fa-solid fa-credit-card"></i></div>
+                        <div class="feature-icon" style="background:#dbeafe;color:#2563eb;"><i class="fa-solid fa-credit-card"></i></div>
                         <h3>Paiement en ligne</h3>
-                        <p>Reglez votre part directement via Stripe ou CIB. Le statut des paiements est mis a jour en temps reel.</p>
+                        <p>Reglez votre part directement via Stripe ou CIB. Statut en temps reel.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon" style="background:#fef3c7; color:#d97706;"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="feature-icon" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-wallet"></i></div>
                         <h3>Portefeuille commun</h3>
-                        <p>Suivez le solde partage du groupe. Chaque mouvement est enregistre et consultable.</p>
+                        <p>Suivez le solde partage du groupe. Chaque mouvement est enregistre.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon" style="background:#d1fae5; color:#059669;"><i class="fa-solid fa-utensils"></i></div>
+                        <div class="feature-icon" style="background:#d1fae5;color:#059669;"><i class="fa-solid fa-utensils"></i></div>
                         <h3>Decouvrez des lieux</h3>
-                        <p>Parcourez restaurants, cinemas et autres activites. Associez une depense a une sortie.</p>
+                        <p>Parcourez restaurants, cinemas et associez une depense a une sortie.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon" style="background:#e0e7ff; color:#4f46e5;"><i class="fa-solid fa-bell"></i></div>
+                        <div class="feature-icon" style="background:#e0e7ff;color:#4f46e5;"><i class="fa-solid fa-bell"></i></div>
                         <h3>Notifications</h3>
-                        <p>Recevez des alertes quand une depense est ajoutee ou qu'un paiement est effectue.</p>
+                        <p>Recevez des alertes quand une depense est ajoutee ou un paiement effectue.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Diagram sections (hidden by default) -->
+            <!-- Diagramme Cas d'utilisation -->
             <div class="diagram-section" id="use-case">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-use-case"><i class="fa-solid fa-person-circle-check"></i></div>
                         <div class="header-info"><h3>Diagramme de Cas d'Utilisation</h3></div>
                         <div class="header-actions">
-                            <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-use-case')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-use-case')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-use-case')"><i class="fa-solid fa-copy"></i></button>
+                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('use-case')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
                     <div class="diagram-card-body">
                         <div class="zoom-container" id="zoom-use-case">
+                            <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-use-case">
 flowchart TB
     subgraph SYSTEM["Application SplitMate"]
-        direction TB
         UC1["Se connecter / inscrire"]
         UC2["Authentification 2FA"]
         UC3["Ajouter des amis (invitation)"]
@@ -489,12 +356,11 @@ flowchart TB
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer">
-                        <i class="fa-solid fa-circle-info"></i> Acteurs : Utilisateur, Admin, Passerelle de paiement. L'invitation utilise un code 2FA.
-                    </div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Acteurs : Utilisateur, Admin, Passerelle de paiement.</div>
                 </div>
             </div>
 
+            <!-- Diagramme de Classes -->
             <div class="diagram-section" id="class">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -502,19 +368,19 @@ flowchart TB
                         <div class="header-info"><h3>Diagramme de Classes</h3></div>
                         <div class="header-actions">
                             <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-class')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-class')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('class')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
                     <div class="diagram-card-body">
                         <div class="zoom-container" id="zoom-class">
+                            <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-class">
 classDiagram
     class Utilisateur {
         +String id
         +String nom
         +String email
-        +String telephone
         +Boolean deuxFacteursActive
         +sinscrire() Boolean
         +activer2FA() void
@@ -542,11 +408,13 @@ classDiagram
         +String code2FA
     }
     class MembreGroupe {
+        +String userId
+        +String groupeId
         +String role
         +Double balanceIndividuelle
     }
     Utilisateur "1" --> "many" Invitation : envoie
-    Utilisateur "many" <--> "many" Groupe : via MembreGroupe
+    Utilisateur "many" --> "many" Groupe : via MembreGroupe
     Groupe "1" --> "many" Depense
     Groupe "1" --> "1" Portefeuille
     Depense "1" --> "many" Paiement
@@ -554,12 +422,11 @@ classDiagram
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer">
-                        <i class="fa-solid fa-circle-info"></i> Invitation avec code 2FA. Portefeuille lie 1:1 au Groupe.
-                    </div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Invitation avec code 2FA. Portefeuille 1:1 Groupe.</div>
                 </div>
             </div>
 
+            <!-- Sequence -->
             <div class="diagram-section" id="sequence">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -567,18 +434,19 @@ classDiagram
                         <div class="header-info"><h3>Diagramme de Sequence – Paiement partage</h3></div>
                         <div class="header-actions">
                             <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-sequence')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-sequence')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('sequence')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
                     <div class="diagram-card-body">
                         <div class="zoom-container" id="zoom-sequence">
+                            <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-sequence">
 sequenceDiagram
     actor A as Ahmed
     actor B as Bilal
     actor C as Chaima
-    participant App as SplitMate App
+    participant App as SplitMate
     participant Server as Serveur
     participant Pay as Stripe/CIB
     A->>App: Ajoute depense 9000 DA
@@ -599,12 +467,11 @@ sequenceDiagram
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer">
-                        <i class="fa-solid fa-circle-info"></i> Scenario complet : creation, division, notifications, paiements.
-                    </div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Scenario complet.</div>
                 </div>
             </div>
 
+            <!-- Activite -->
             <div class="diagram-section" id="activity">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -612,25 +479,24 @@ sequenceDiagram
                         <div class="header-info"><h3>Diagramme d'Activite</h3></div>
                         <div class="header-actions">
                             <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-activity')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-activity')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('activity')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
                     <div class="diagram-card-body">
                         <div class="zoom-container" id="zoom-activity">
+                            <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-activity">
 flowchart TD
     Start([Debut]) --> Login[Connexion / Inscription]
     Login --> Has2FA{2FA activee ?}
     Has2FA -->|Oui| TwoFA[Saisir code]
     Has2FA -->|Non| Dashboard[Tableau de bord]
-    TwoFA --> CodeValid{Valide ?}
-    CodeValid -->|Oui| Dashboard
+    TwoFA --> CodeValid{Valide ?} -->|Oui| Dashboard
     CodeValid -->|Non| TwoFA
     Dashboard --> Choice{Action ?}
     Choice -->|Ajouter amis| Invite[Envoyer invitation + code 2FA]
-    Invite --> FriendAccept{Accepte ?}
-    FriendAccept -->|Oui| SharedSpace[Espace partage]
+    Invite --> FriendAccept{Accepte ?} -->|Oui| SharedSpace[Espace partage]
     FriendAccept -->|Non| Invite
     SharedSpace --> Dashboard
     Choice -->|Nouvelle depense| SelectGroup[Selectionner groupe]
@@ -640,29 +506,23 @@ flowchart TD
     NotifyMembers --> ViewShares[Voir parts]
     ViewShares --> PayNow{Payer ?}
     PayNow -->|Oui| OnlinePay[Paiement Stripe/CIB]
-    OnlinePay --> ConfirmPay{Confirme ?}
-    ConfirmPay -->|Oui| UpdateWallet[Mise a jour portefeuille]
-    ConfirmPay -->|Non| Retry[Reessayer]
-    Retry --> OnlinePay
+    OnlinePay --> ConfirmPay{Confirme ?} -->|Oui| UpdateWallet[Mise a jour portefeuille]
+    ConfirmPay -->|Non| Retry[Reessayer] --> OnlinePay
     PayNow -->|Plus tard| Pending[En attente]
-    UpdateWallet --> AllPaid{Tous paye ?}
-    AllPaid -->|Oui| Close[Depense cloturee]
+    UpdateWallet --> AllPaid{Tous paye ?} -->|Oui| Close[Depense cloturee]
     AllPaid -->|Non| ViewShares
     Pending --> Close
     Close --> End([Termine])
     Choice -->|Explorer| Browse[Parcourir activites]
-    Browse --> Filter[Filtrer]
-    Filter --> SelectPlace[Choisir lieu]
-    SelectPlace --> SelectGroup
+    Browse --> Filter[Filtrer] --> SelectPlace[Choisir lieu] --> SelectGroup
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer">
-                        <i class="fa-solid fa-circle-info"></i> Flux complet avec invitation 2FA et paiement en ligne.
-                    </div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Flux complet.</div>
                 </div>
             </div>
 
+            <!-- ER -->
             <div class="diagram-section" id="er">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -670,12 +530,13 @@ flowchart TD
                         <div class="header-info"><h3>Modele Entite-Relation (ER)</h3></div>
                         <div class="header-actions">
                             <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-er')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-er')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('er')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
                     <div class="diagram-card-body">
                         <div class="zoom-container" id="zoom-er">
+                            <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-er">
 erDiagram
     UTILISATEUR {
@@ -729,12 +590,11 @@ erDiagram
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer">
-                        <i class="fa-solid fa-circle-info"></i> Tables de jointure : MEMBRE_GROUPE, PART_DEPENSE.
-                    </div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Tables de jointure.</div>
                 </div>
             </div>
 
+            <!-- Composants -->
             <div class="diagram-section" id="component">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -742,12 +602,13 @@ erDiagram
                         <div class="header-info"><h3>Diagramme de Composants</h3></div>
                         <div class="header-actions">
                             <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-component')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-component')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('component')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
                     <div class="diagram-card-body">
                         <div class="zoom-container" id="zoom-component">
+                            <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-component">
 flowchart TB
     subgraph MOBILE["Application Mobile (React Native)"]
@@ -765,22 +626,16 @@ flowchart TB
     end
     subgraph DATA["Donnees"]
         MainDB["PostgreSQL"]
-        Cache["Redis"]
-    end
-    subgraph EXTERNAL["Services Externes"]
-        StripeAPI["Stripe / CIB"]
     end
     UI --> AuthModule
     AuthModule --> APIGateway
     APIGateway --> AuthService
     AuthService --> MainDB
-    PaymentService --> StripeAPI
+    PaymentService --> StripeAPI["Stripe/CIB"]
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer">
-                        <i class="fa-solid fa-circle-info"></i> Architecture : React Native, Node.js, PostgreSQL, Stripe/CIB.
-                    </div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Architecture simplifiee.</div>
                 </div>
             </div>
         </div>
@@ -788,9 +643,11 @@ flowchart TB
 
     <!-- Fullscreen Modal -->
     <div class="fullscreen-modal" id="fullscreenModal">
-        <div class="modal-content" id="modalContent">
+        <div class="modal-content">
             <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
-            <div class="zoom-container" id="modalZoomContainer" style="width:100%;height:100%;"></div>
+            <div class="zoom-container" id="modalZoomContainer" style="width:100%;height:100%;">
+                <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+            </div>
             <div class="modal-zoom-controls">
                 <button id="modalZoomIn"><i class="fa-solid fa-plus"></i></button>
                 <button id="modalZoomOut"><i class="fa-solid fa-minus"></i></button>
@@ -799,13 +656,12 @@ flowchart TB
         </div>
     </div>
 
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============ Mermaid init ============
+        // ============ Mermaid manual rendering with spinner hide ============
         mermaid.initialize({
-            startOnLoad: true,
+            startOnLoad: false,
             theme: 'default',
             securityLevel: 'loose',
             fontFamily: 'Poppins, Cairo, sans-serif',
@@ -815,6 +671,25 @@ flowchart TB
             er: { useMaxWidth: true, padding: 12 },
         });
 
+        async function renderDiagrams() {
+            const elements = document.querySelectorAll('.mermaid');
+            for (const el of elements) {
+                try {
+                    await mermaid.run({ nodes: [el] });
+                } catch (e) {
+                    console.error('Mermaid render error', e);
+                }
+                // Hide spinner in this zoom container
+                const container = el.closest('.zoom-container');
+                if (container) {
+                    const spinner = container.querySelector('.spinner-container');
+                    if (spinner) spinner.classList.add('hidden');
+                }
+            }
+        }
+
+        window.addEventListener('load', renderDiagrams);
+
         // ============ SPA Navigation ============
         const homeSection = document.getElementById('home');
         const diagramSections = document.querySelectorAll('.diagram-section');
@@ -822,58 +697,50 @@ flowchart TB
         const sidebar = document.getElementById('sidebar');
 
         function showSection(targetId) {
-            // Hide all
             homeSection.classList.remove('active');
             diagramSections.forEach(s => s.classList.remove('active'));
-            // Show target
             if (targetId === 'home') {
                 homeSection.classList.add('active');
             } else {
                 const target = document.getElementById(targetId);
                 if (target) target.classList.add('active');
             }
-            // Update active link
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('data-target') === targetId) link.classList.add('active');
             });
-            // On mobile, close sidebar
             if (window.innerWidth <= 768) sidebar.classList.remove('open');
         }
 
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const target = link.getAttribute('data-target');
-                showSection(target);
+                showSection(link.getAttribute('data-target'));
             });
         });
 
-        // Home link in navbar
         document.getElementById('homeLink').addEventListener('click', (e) => {
             e.preventDefault();
             showSection('home');
         });
 
-        // ============ Sidebar toggle ============
-        const navbarMenuBtn = document.getElementById('navbarMenuBtn');
-        navbarMenuBtn.addEventListener('click', () => {
+        // Sidebar toggle
+        document.getElementById('navbarMenuBtn').addEventListener('click', () => {
             sidebar.classList.toggle('open');
         });
 
-        // ============ Collapse ============
+        // Collapse
         function toggleCard(header) {
             header.closest('.diagram-card').classList.toggle('collapsed');
         }
 
-        // ============ Copy Code ============
+        // Copy
         function copyCode(mermaidId) {
             const pre = document.getElementById(mermaidId);
             if (!pre) return;
             navigator.clipboard.writeText(pre.textContent.trim()).then(() => showToast('Code Mermaid copie !'));
         }
 
-        // ============ Toast ============
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
@@ -882,13 +749,17 @@ flowchart TB
             toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // ============ Zoom & Pan ============
+        // Zoom & Pan
         function setupZoomPan(container) {
             let scale = 1, panX = 0, panY = 0;
             let isDragging = false, startX, startY, lastPanX, lastPanY;
             const el = container;
             function applyTransform() {
-                el.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+                const svg = el.querySelector('svg');
+                if (svg) {
+                    svg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+                    svg.style.transformOrigin = '0 0';
+                }
             }
             el.addEventListener('wheel', (e) => {
                 e.preventDefault();
@@ -905,12 +776,8 @@ flowchart TB
                 applyTransform();
             });
             el.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                startX = e.clientX;
-                startY = e.clientY;
-                lastPanX = panX;
-                lastPanY = panY;
-                el.classList.add('dragging');
+                isDragging = true; startX = e.clientX; startY = e.clientY;
+                lastPanX = panX; lastPanY = panY; el.classList.add('dragging');
             });
             window.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
@@ -918,21 +785,15 @@ flowchart TB
                 panY = lastPanY + (e.clientY - startY);
                 applyTransform();
             });
-            window.addEventListener('mouseup', () => {
-                isDragging = false;
-                el.classList.remove('dragging');
-            });
+            window.addEventListener('mouseup', () => { isDragging = false; el.classList.remove('dragging'); });
             // Touch
             let initialPinchDistance, initialScale;
             el.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 const touches = [...e.touches];
                 if (touches.length === 1) {
-                    isDragging = true;
-                    startX = touches[0].clientX;
-                    startY = touches[0].clientY;
-                    lastPanX = panX;
-                    lastPanY = panY;
+                    isDragging = true; startX = touches[0].clientX; startY = touches[0].clientY;
+                    lastPanX = panX; lastPanY = panY;
                 } else if (touches.length === 2) {
                     isDragging = false;
                     const dx = touches[0].clientX - touches[1].clientX;
@@ -954,8 +815,8 @@ flowchart TB
                     const dist = Math.hypot(dx, dy);
                     const newScale = Math.min(3, Math.max(0.3, initialScale * (dist / initialPinchDistance)));
                     const rect = el.getBoundingClientRect();
-                    const mx = (touches[0].clientX + touches[1].clientX) / 2 - rect.left;
-                    const my = (touches[0].clientY + touches[1].clientY) / 2 - rect.top;
+                    const mx = (touches[0].clientX + touches[1].clientX)/2 - rect.left;
+                    const my = (touches[0].clientY + touches[1].clientY)/2 - rect.top;
                     const sx = (mx - panX) / scale;
                     const sy = (my - panY) / scale;
                     panX = mx - sx * newScale;
@@ -968,64 +829,64 @@ flowchart TB
         }
         document.querySelectorAll('.zoom-container').forEach(c => setupZoomPan(c));
 
-        // ============ Fullscreen ============
+        // Fullscreen
         const modal = document.getElementById('fullscreenModal');
         const modalZoomContainer = document.getElementById('modalZoomContainer');
-        function openFullscreen(mermaidId) {
-            const sourceContainer = document.getElementById('zoom-' + mermaidId.split('-')[1]);
+        const modalSpinner = modalZoomContainer.querySelector('.spinner-container');
+        function openFullscreen(diagramKey) {
+            const sourceContainer = document.getElementById('zoom-' + diagramKey);
             if (!sourceContainer) return;
             const svg = sourceContainer.querySelector('svg');
             if (svg) {
                 modalZoomContainer.innerHTML = '';
                 modalZoomContainer.appendChild(svg.cloneNode(true));
-            } else {
-                setTimeout(() => {
-                    const svg2 = sourceContainer.querySelector('svg');
-                    if (svg2) {
-                        modalZoomContainer.innerHTML = '';
-                        modalZoomContainer.appendChild(svg2.cloneNode(true));
-                    }
-                }, 200);
+                // re-add spinner (hidden)
+                const spinner = document.createElement('div');
+                spinner.className = 'spinner-container hidden';
+                spinner.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                modalZoomContainer.appendChild(spinner);
             }
             modal.classList.add('active');
-            modalZoomContainer.style.transform = 'translate(0px,0px) scale(1)';
+            modalZoomContainer.style.transform = '';
+            const innerSvg = modalZoomContainer.querySelector('svg');
+            if (innerSvg) innerSvg.style.transform = '';
         }
         document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('active'));
         document.getElementById('modalZoomIn').addEventListener('click', () => {
-            const el = modalZoomContainer;
-            const currentScale = parseFloat(el.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
-            el.style.transform = el.style.transform.replace(/scale\([^)]+\)/, `scale(${Math.min(3, currentScale * 1.2)})`);
+            const svg = modalZoomContainer.querySelector('svg');
+            if (!svg) return;
+            let cur = parseFloat(svg.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
+            svg.style.transform = `scale(${Math.min(3, cur * 1.2)})`;
         });
         document.getElementById('modalZoomOut').addEventListener('click', () => {
-            const el = modalZoomContainer;
-            const currentScale = parseFloat(el.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
-            el.style.transform = el.style.transform.replace(/scale\([^)]+\)/, `scale(${Math.max(0.3, currentScale / 1.2)})`);
+            const svg = modalZoomContainer.querySelector('svg');
+            if (!svg) return;
+            let cur = parseFloat(svg.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
+            svg.style.transform = `scale(${Math.max(0.3, cur / 1.2)})`;
         });
         document.getElementById('modalZoomReset').addEventListener('click', () => {
-            modalZoomContainer.style.transform = 'translate(0px,0px) scale(1)';
+            const svg = modalZoomContainer.querySelector('svg');
+            if (svg) svg.style.transform = 'scale(1)';
         });
 
-        // ============ PWA Icon & Manifest ============
+        // PWA Icon & Manifest
         function generateIcon() {
             const canvas = document.createElement('canvas');
             canvas.width = 192; canvas.height = 192;
             const ctx = canvas.getContext('2d');
             const grad = ctx.createLinearGradient(0,0,192,192);
-            grad.addColorStop(0, '#8b5cf6');
-            grad.addColorStop(1, '#f59e0b');
+            grad.addColorStop(0, '#8b5cf6'); grad.addColorStop(1, '#f59e0b');
             ctx.fillStyle = grad;
             ctx.beginPath(); ctx.arc(96,96,80,0,Math.PI*2); ctx.fill();
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 80px "Font Awesome 5 Free", "Poppins", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            ctx.font = 'bold 80px "Font Awesome 5 Free","Poppins",sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.fillText('\uf4be', 96, 96);
             return canvas.toDataURL('image/png');
         }
         const iconDataUrl = generateIcon();
         document.getElementById('favicon').href = iconDataUrl;
         document.getElementById('appleIcon').href = iconDataUrl;
-
         const manifest = {
             name: 'SplitMate UML',
             short_name: 'SplitMate',
@@ -1035,25 +896,12 @@ flowchart TB
             theme_color: '#6c3ce0',
             icons: [{ src: iconDataUrl, sizes: '192x192', type: 'image/png' }]
         };
-        const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-        const manifestUrl = URL.createObjectURL(blob);
-        document.getElementById('manifestLink').href = manifestUrl;
-
+        const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+        document.getElementById('manifestLink').href = URL.createObjectURL(blob);
         if ('serviceWorker' in navigator) {
-            const swCode = `
-                self.addEventListener('install', e => {
-                    e.waitUntil(caches.open('splitmate-v1').then(cache => cache.addAll(['./'])));
-                });
-                self.addEventListener('fetch', e => {
-                    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-                });
-            `;
-            const swBlob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swUrl);
+            const swCode = `self.addEventListener('install',e=>{e.waitUntil(caches.open('splitmate-v1').then(c=>c.addAll(['./'])))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});`;
+            navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})));
         }
-
-        // Note: Installation comme PWA necessite HTTPS ou localhost. Ce fichier doit etre servi via un serveur.
     </script>
 </body>
 </html>
