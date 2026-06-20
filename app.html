@@ -2,8 +2,15 @@
 <html lang="fr" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>SplitMate – Diagrammes UML</title>
+    <!-- PWA Meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6c3ce0">
+    <link rel="apple-touch-icon" sizes="192x192" href="" id="appleIcon">
+    <link rel="icon" type="image/png" sizes="192x192" href="" id="favicon">
+    <link rel="manifest" href="" id="manifestLink">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Mermaid JS -->
@@ -21,15 +28,12 @@
             --text: #1e1b2e;
             --text-light: #5c5776;
             --border: #e2e0eb;
-            --shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07);
             --radius: 14px;
+            --sidebar-width: 280px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', 'Cairo', sans-serif;
@@ -37,136 +41,152 @@
             color: var(--text);
             line-height: 1.6;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
-            padding: 16px 12px 32px;
-            max-width: 600px;
-            margin: 0 auto;
+            overflow-x: hidden;
         }
 
-        /* Top Navigation */
-        .top-nav {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--surface);
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            position: sticky;
-            top: 10px;
-            z-index: 100;
-        }
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary);
-        }
-        .nav-brand i {
-            font-size: 1.4rem;
-            color: var(--accent);
-        }
-        .menu-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text);
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            transition: background 0.2s;
-        }
-        .menu-btn:hover {
-            background: rgba(0,0,0,0.05);
-        }
-
-        /* Menu overlay */
-        .menu-overlay {
+        /* Sidebar */
+        .sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 200;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .menu-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .menu-panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 80%;
-            max-width: 320px;
-            height: 100%;
-            background: #fff;
-            z-index: 201;
-            transform: translateX(100%);
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1035 0%, #0d0820 100%);
+            color: #fff;
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: 4px 0 30px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
-            padding: 24px 20px;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
         }
-        .menu-panel.active {
-            transform: translateX(0);
+        .sidebar-header {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
         }
-        .menu-close {
-            align-self: flex-end;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-        .menu-links {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .menu-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            padding: 12px 14px;
-            border-radius: 10px;
+        .sidebar-logo {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            transition: background 0.2s;
-            font-size: 0.95rem;
+            margin-bottom: 6px;
         }
-        .menu-links a i {
+        .sidebar-logo .icon-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+        .sidebar-logo h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #d4c5f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .sidebar-subtitle {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.55);
+        }
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sidebar-nav a i {
             width: 20px;
             text-align: center;
-            color: var(--primary);
+            font-size: 1rem;
         }
-        .menu-links a:hover {
-            background: #f4f1fd;
+        .sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sidebar-nav a.active { background: rgba(139,92,246,0.3); color: #fff; font-weight: 600; }
+
+        /* Main content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 28px 32px 60px;
+            max-width: 1100px;
+            width: 100%;
         }
 
-        /* Diagram cards */
-        .diagram-section {
-            width: 100%;
-            margin-bottom: 28px;
-            scroll-margin-top: 80px;
+        /* Home Section */
+        .home-section {
+            margin-bottom: 40px;
         }
+        .home-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .home-header .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(108,60,224,0.4);
+        }
+        .home-title h1 { font-size: 2rem; font-weight: 700; color: var(--text); }
+        .home-title p { font-size: 1rem; color: var(--text-light); max-width: 600px; margin-top: 8px; }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 32px;
+        }
+        .feature-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+        .feature-card:hover { transform: translateY(-4px); }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        .feature-card h3 { font-size: 1rem; margin-bottom: 6px; }
+        .feature-card p { font-size: 0.85rem; color: var(--text-light); }
+
+        /* Diagram sections */
+        .diagram-section { margin-bottom: 28px; scroll-margin-top: 20px; }
         .diagram-card {
             background: var(--surface);
             border-radius: var(--radius);
@@ -201,161 +221,211 @@
         .icon-er { background: #d1fae5; color: #059669; }
         .icon-component { background: #e0e7ff; color: #4f46e5; }
 
-        .header-info h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text);
-            margin: 0;
-            line-height: 1.3;
-        }
-        .header-desc {
-            font-size: 0.7rem;
-            color: var(--text-light);
-            margin-top: 2px;
-            display: none;
-        }
-        .header-actions {
-            margin-left: auto;
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
+        .header-info h3 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin: 0; }
+        .header-actions { margin-left: auto; display: flex; gap: 6px; }
         .btn-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-            transition: all 0.2s;
-            font-size: 0.8rem;
+            width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+            background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--text-light); transition: all 0.2s; font-size: 0.8rem;
         }
-        .btn-icon:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-        .collapse-arrow {
-            transition: transform 0.2s;
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-        .diagram-card.collapsed .collapse-arrow {
-            transform: rotate(-90deg);
-        }
+        .btn-icon:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .collapse-arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--text-light); }
+        .diagram-card.collapsed .collapse-arrow { transform: rotate(-90deg); }
         .diagram-card-body {
             padding: 10px 6px 14px;
-            overflow-x: auto;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             background: #fdfdfe;
             min-height: 200px;
+            position: relative;
         }
-        .diagram-card.collapsed .diagram-card-body {
-            display: none;
-        }
+        .diagram-card.collapsed .diagram-card-body { display: none; }
         .diagram-card-footer {
-            padding: 8px 16px;
-            border-top: 1px solid var(--border);
-            font-size: 0.7rem;
-            color: var(--text-light);
-            background: #faf9fe;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            padding: 8px 16px; border-top: 1px solid var(--border);
+            font-size: 0.7rem; color: var(--text-light); background: #faf9fe;
+            display: flex; align-items: center; gap: 6px;
         }
-        .diagram-card.collapsed .diagram-card-footer {
+        .diagram-card.collapsed .diagram-card-footer { display: none; }
+
+        /* Zoom/Pan container */
+        .zoom-container {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            transform-origin: 0 0;
+            will-change: transform;
+        }
+        .zoom-container:active { cursor: grabbing; }
+        .zoom-container.dragging { cursor: grabbing; }
+
+        /* Fullscreen modal */
+        .fullscreen-modal {
             display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .fullscreen-modal.active { display: flex; }
+        .fullscreen-modal .modal-content {
+            width: 90vw; height: 90vh;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-close {
+            position: absolute; top: 16px; right: 16px; z-index: 10;
+            width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff;
+            border: none; font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-zoom-controls {
+            position: absolute; bottom: 16px; right: 16px; z-index: 10;
+            display: flex; gap: 8px;
+        }
+        .modal-zoom-controls button {
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: rgba(0,0,0,0.5); color: #fff; font-size: 1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
         }
 
         /* Toast */
         .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
+            position: fixed; bottom: 20px; left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: #1a1035;
-            color: #fff;
-            padding: 10px 22px;
-            border-radius: 24px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            z-index: 9999;
-            opacity: 0;
-            transition: all 0.4s ease;
-            pointer-events: none;
-            white-space: nowrap;
+            background: #1a1035; color: #fff; padding: 10px 22px; border-radius: 24px;
+            font-size: 0.85rem; font-weight: 500; z-index: 9999;
+            opacity: 0; transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
         }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Mobile sidebar */
+        .mobile-sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 16px; left: 16px; z-index: 1100;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--primary); color: #fff; border: none;
+            font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow);
+            align-items: center; justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 20px 14px 40px; }
+            .mobile-sidebar-toggle { display: flex; }
+            .home-header { flex-direction: column; align-items: flex-start; }
         }
 
         @media print {
-            .top-nav, .menu-overlay, .menu-panel, .btn-icon, .toast {
+            .sidebar, .mobile-sidebar-toggle, .toast, .fullscreen-modal {
                 display: none !important;
             }
-            body {
-                padding: 0;
-                max-width: 100%;
-            }
-            .diagram-card {
-                break-inside: avoid;
-                box-shadow: none;
-                border: 1px solid #ccc;
-            }
-            .diagram-card-body {
-                overflow: visible;
-            }
+            .main-content { margin-left: 0; padding: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation Bar -->
-    <nav class="top-nav" id="topNav">
-        <div class="nav-brand">
-            <i class="fa-solid fa-hand-holding-heart"></i>
-            <span>SplitMate</span>
-        </div>
-        <button class="menu-btn" id="menuOpenBtn" aria-label="Menu">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </nav>
+    <!-- Mobile toggle button -->
+    <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+    </button>
 
-    <!-- Menu Overlay and Panel -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-    <div class="menu-panel" id="menuPanel">
-        <button class="menu-close" id="menuCloseBtn"><i class="fa-solid fa-xmark"></i></button>
-        <div class="menu-links">
-            <a href="#use-case" class="nav-link"><i class="fa-solid fa-person-circle-check"></i> Cas d'utilisation</a>
-            <a href="#class" class="nav-link"><i class="fa-solid fa-cubes"></i> Diagramme de classes</a>
-            <a href="#sequence" class="nav-link"><i class="fa-solid fa-arrows-spin"></i> Sequence paiement</a>
-            <a href="#activity" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Activite</a>
-            <a href="#er" class="nav-link"><i class="fa-solid fa-database"></i> Modele Entite-Relation</a>
-            <a href="#component" class="nav-link"><i class="fa-solid fa-server"></i> Composants</a>
-        </div>
-    </div>
-
-    <!-- 1. USE CASE DIAGRAM -->
-    <div class="diagram-section" id="use-case">
-        <div class="diagram-card">
-            <div class="diagram-card-header" onclick="toggleCard(this)">
-                <div class="diagram-icon icon-use-case"><i class="fa-solid fa-person-circle-check"></i></div>
-                <div class="header-info">
-                    <h3>Diagramme de Cas d'Utilisation</h3>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-use-case')"><i class="fa-solid fa-copy"></i></button>
-                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                <h2>SplitMate</h2>
+            </div>
+            <p class="sidebar-subtitle">Documentation UML</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#home" class="nav-link active" data-section="home"><i class="fa-solid fa-house"></i> Accueil</a>
+            <a href="#use-case" class="nav-link" data-section="use-case"><i class="fa-solid fa-person-circle-check"></i> Cas d'utilisation</a>
+            <a href="#class" class="nav-link" data-section="class"><i class="fa-solid fa-cubes"></i> Classes</a>
+            <a href="#sequence" class="nav-link" data-section="sequence"><i class="fa-solid fa-arrows-spin"></i> Sequence</a>
+            <a href="#activity" class="nav-link" data-section="activity"><i class="fa-solid fa-diagram-project"></i> Activite</a>
+            <a href="#er" class="nav-link" data-section="er"><i class="fa-solid fa-database"></i> Entite-Relation</a>
+            <a href="#component" class="nav-link" data-section="component"><i class="fa-solid fa-server"></i> Composants</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Home Section -->
+        <section class="home-section" id="home">
+            <div class="home-header">
+                <div class="app-icon">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+                <div class="home-title">
+                    <h1>SplitMate</h1>
+                    <p>Application de partage equitable des frais entre amis, couples et groupes. Simplifiez les comptes communs avec un portefeuille partage et des propositions d'activites.</p>
                 </div>
             </div>
-            <div class="diagram-card-body">
-                <pre class="mermaid" id="mermaid-use-case">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon icon-use-case"><i class="fa-solid fa-user-plus"></i></div>
+                    <h3>Invitation securisee</h3>
+                    <p>Ajoutez vos amis via un code de verification 2FA. Creez des espaces prives et partages.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#fce7f3; color:#db2777;"><i class="fa-solid fa-calculator"></i></div>
+                    <h3>Division automatique</h3>
+                    <p>Chaque depense est divisee equitablement entre les membres du groupe. Visualisez qui doit combien.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#dbeafe; color:#2563eb;"><i class="fa-solid fa-credit-card"></i></div>
+                    <h3>Paiement en ligne</h3>
+                    <p>Reglez votre part directement via Stripe ou CIB. Le statut des paiements est mis a jour en temps reel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#fef3c7; color:#d97706;"><i class="fa-solid fa-wallet"></i></div>
+                    <h3>Portefeuille commun</h3>
+                    <p>Suivez le solde partage du groupe. Chaque mouvement est enregistre et consultable.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#d1fae5; color:#059669;"><i class="fa-solid fa-utensils"></i></div>
+                    <h3>Decouvrez des lieux</h3>
+                    <p>Parcourez restaurants, cinemas et autres activites. Associez une depense a une sortie.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#e0e7ff; color:#4f46e5;"><i class="fa-solid fa-bell"></i></div>
+                    <h3>Notifications</h3>
+                    <p>Recevez des alertes quand une depense est ajoutee ou qu'un paiement est effectue.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. USE CASE DIAGRAM -->
+        <div class="diagram-section" id="use-case">
+            <div class="diagram-card">
+                <div class="diagram-card-header" onclick="toggleCard(this)">
+                    <div class="diagram-icon icon-use-case"><i class="fa-solid fa-person-circle-check"></i></div>
+                    <div class="header-info"><h3>Diagramme de Cas d'Utilisation</h3></div>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-use-case')"><i class="fa-solid fa-copy"></i></button>
+                        <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-use-case')"><i class="fa-solid fa-expand"></i></button>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                </div>
+                <div class="diagram-card-body">
+                    <div class="zoom-container" id="zoom-use-case">
+                        <pre class="mermaid" id="mermaid-use-case">
 flowchart TB
     subgraph SYSTEM["Application SplitMate"]
         direction TB
@@ -371,9 +441,9 @@ flowchart TB
         UC10["Proposer une activite"]
     end
 
-    USER["Utilisateur\n(Amis, couples)"]
+    USER["Utilisateur (Amis, couples)"]
     ADMIN["Administrateur"]
-    PAYMENT["Passerelle de paiement\n(Stripe, CIB)"]
+    PAYMENT["Passerelle de paiement (Stripe, CIB)"]
 
     USER --> UC1
     USER --> UC2
@@ -393,29 +463,30 @@ flowchart TB
     style ADMIN fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#1e1b2e
     style PAYMENT fill:#d1fae5,stroke:#059669,stroke-width:2px,color:#1e1b2e
     style UC7 fill:#fff7ed,stroke:#f59e0b,stroke-width:2px
-                </pre>
-            </div>
-            <div class="diagram-card-footer">
-                <i class="fa-solid fa-circle-info"></i> Acteurs : Utilisateur, Admin, Passerelle de paiement externe. L'invitation d'amis utilise un code de verification 2FA.
+                        </pre>
+                    </div>
+                </div>
+                <div class="diagram-card-footer">
+                    <i class="fa-solid fa-circle-info"></i> Acteurs : Utilisateur, Admin, Passerelle de paiement. L'invitation utilise un code 2FA.
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- 2. CLASS DIAGRAM -->
-    <div class="diagram-section" id="class">
-        <div class="diagram-card">
-            <div class="diagram-card-header" onclick="toggleCard(this)">
-                <div class="diagram-icon icon-class"><i class="fa-solid fa-cubes"></i></div>
-                <div class="header-info">
-                    <h3>Diagramme de Classes</h3>
+        <!-- 2. CLASS DIAGRAM -->
+        <div class="diagram-section" id="class">
+            <div class="diagram-card">
+                <div class="diagram-card-header" onclick="toggleCard(this)">
+                    <div class="diagram-icon icon-class"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="header-info"><h3>Diagramme de Classes</h3></div>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-class')"><i class="fa-solid fa-copy"></i></button>
+                        <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-class')"><i class="fa-solid fa-expand"></i></button>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-class')"><i class="fa-solid fa-copy"></i></button>
-                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
-                </div>
-            </div>
-            <div class="diagram-card-body">
-                <pre class="mermaid" id="mermaid-class">
+                <div class="diagram-card-body">
+                    <div class="zoom-container" id="zoom-class">
+                        <pre class="mermaid" id="mermaid-class">
 classDiagram
     class Utilisateur {
         +String id
@@ -431,7 +502,6 @@ classDiagram
         +activer2FA() void
         +mettreAJourProfil() void
     }
-
     class Groupe {
         +String id
         +String nom
@@ -442,9 +512,7 @@ classDiagram
         +ajouterMembre(userId) void
         +supprimerMembre(userId) void
         +calculerSolde() Double
-        +getMembres() List~Utilisateur~
     }
-
     class Depense {
         +String id
         +String description
@@ -454,347 +522,240 @@ classDiagram
         +String payeParUserId
         +String groupeId
         +String activiteId
-        +ajouterDepense() Depense
-        +diviserEquitablement() Map
-        +getPartParPersonne() Double
-        +getStatutPaiements() String
     }
-
     class Portefeuille {
         +String id
-        +String groupeId
         +Double balance
         +String devise
-        +List~Transaction~ transactions
-        +consulterSolde() Double
-        +ajouterFonds(montant) void
-        +debiter(montant) Boolean
     }
-
     class Paiement {
         +String id
         +Double montant
         +String methode
         +String statut
-        +DateTime date
-        +String userId
-        +String depenseId
         +String referenceExterne
-        +effectuerPaiement() Boolean
-        +verifierStatut() String
-        +rembourser() Boolean
     }
-
+    class Invitation {
+        +String code2FA
+        +DateTime dateExpiration
+    }
     class Activite {
-        +String id
         +String nom
         +String type
-        +String adresse
         +Double prixMoyen
-        +Float note
-        +String imageUrl
-        +String description
-        +getDetails() Activite
-        +filtrerParType(type) List~Activite~
-        +filtrerParPrix(range) List~Activite~
     }
-
-    class Invitation {
-        +String id
-        +String deUserId
-        +String aUserId
-        +String statut
-        +String code2FA
-        +DateTime dateEnvoi
-        +DateTime dateExpiration
-        +envoyer() Boolean
-        +accepter(code2FA) Boolean
-        +refuser() void
-        +verifierCode(code) Boolean
-    }
-
     class MembreGroupe {
-        +String userId
-        +String groupeId
         +String role
-        +DateTime dateAdhesion
         +Double balanceIndividuelle
     }
-
     Utilisateur "1" --> "many" Invitation : envoie
-    Utilisateur "1" --> "many" Invitation : reçoit
     Utilisateur "many" <--> "many" Groupe : via MembreGroupe
     Groupe "1" --> "many" Depense : contient
-    Groupe "1" --> "1" Portefeuille : possède
-    Depense "1" --> "many" Paiement : génère
-    Utilisateur "1" --> "many" Paiement : effectue
-    Depense "many" --> "0..1" Activite : liée à
-    MembreGroupe ..> Utilisateur
-    MembreGroupe ..> Groupe
-                </pre>
-            </div>
-            <div class="diagram-card-footer">
-                <i class="fa-solid fa-circle-info"></i> L'invitation contient un code 2FA. La classe Portefeuille est liee 1:1 au Groupe. Paiement gere les transactions Stripe/CIB.
+    Groupe "1" --> "1" Portefeuille
+    Depense "1" --> "many" Paiement
+    Utilisateur "1" --> "many" Paiement
+    Depense "many" --> "0..1" Activite
+                        </pre>
+                    </div>
+                </div>
+                <div class="diagram-card-footer">
+                    <i class="fa-solid fa-circle-info"></i> Invitation avec code 2FA. Portefeuille lie 1:1 au Groupe.
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- 3. SEQUENCE DIAGRAM -->
-    <div class="diagram-section" id="sequence">
-        <div class="diagram-card">
-            <div class="diagram-card-header" onclick="toggleCard(this)">
-                <div class="diagram-icon icon-sequence"><i class="fa-solid fa-arrows-spin"></i></div>
-                <div class="header-info">
-                    <h3>Diagramme de Sequence – Paiement partage</h3>
+        <!-- 3. SEQUENCE DIAGRAM -->
+        <div class="diagram-section" id="sequence">
+            <div class="diagram-card">
+                <div class="diagram-card-header" onclick="toggleCard(this)">
+                    <div class="diagram-icon icon-sequence"><i class="fa-solid fa-arrows-spin"></i></div>
+                    <div class="header-info"><h3>Diagramme de Sequence – Paiement partage</h3></div>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-sequence')"><i class="fa-solid fa-copy"></i></button>
+                        <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-sequence')"><i class="fa-solid fa-expand"></i></button>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-sequence')"><i class="fa-solid fa-copy"></i></button>
-                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
-                </div>
-            </div>
-            <div class="diagram-card-body">
-                <pre class="mermaid" id="mermaid-sequence">
+                <div class="diagram-card-body">
+                    <div class="zoom-container" id="zoom-sequence">
+                        <pre class="mermaid" id="mermaid-sequence">
 sequenceDiagram
     actor A as Ahmed
     actor B as Bilal
     actor C as Chaima
     participant App as SplitMate App
     participant Server as Serveur
-    participant Pay as Passerelle de paiement (Stripe/CIB)
+    participant Pay as Stripe/CIB
 
     Note over A,C: Membres du meme espace partage
 
-    rect rgb(245, 243, 255)
-        Note over A,Server: 1. Creation de la depense
+    rect rgb(245,243,255)
         A->>App: Ajoute depense "Restaurant 9000 DA"
-        App->>Server: POST /expenses {montant:9000, groupeId:"G1"}
-        Server->>Server: Division 9000/3 = 3000 DA/pers.
-        Server-->>App: Depense creee + parts
-        App->>B: Notification : vous devez 3000 DA
-        App->>C: Notification : vous devez 3000 DA
+        App->>Server: POST /expenses
+        Server->>Server: Division 9000/3 = 3000 DA
+        Server-->>App: Parts calculees
+        App->>B: Notification 3000 DA
+        App->>C: Notification 3000 DA
     end
 
-    rect rgb(236, 252, 243)
-        Note over B,Pay: 2. Paiement de Bilal
-        B->>App: Consulte sa part (3000 DA)
-        B->>App: Clique "Payer maintenant"
-        App->>Pay: Requete paiement 3000 DA (Stripe/CIB)
-        Pay-->>Server: Webhook confirmation paiement
-        Server->>Server: Mise a jour statut
-        Server-->>App: Paiement Bilal confirme
-        App->>A: Notification : Bilal a paye
-        App->>C: Notification : Bilal a paye
+    rect rgb(236,252,243)
+        B->>App: Payer maintenant
+        App->>Pay: Paiement 3000 DA
+        Pay-->>Server: Confirmation
+        Server-->>App: Paiement Bilal OK
     end
 
-    rect rgb(254, 243, 199)
-        Note over C,Pay: 3. Paiement de Chaima
-        C->>App: Consulte sa part (3000 DA)
-        C->>App: Effectue le paiement
-        App->>Pay: Requete paiement 3000 DA
-        Pay-->>Server: Webhook confirmation
-        Server-->>App: Paiement Chaima confirme
-        App->>A: Notification : Chaima a paye
-        App->>B: Notification : Chaima a paye
+    rect rgb(254,243,199)
+        C->>App: Payer maintenant
+        App->>Pay: Paiement 3000 DA
+        Pay-->>Server: Confirmation
+        Server-->>App: Paiement Chaima OK
     end
 
-    rect rgb(232, 240, 255)
-        Note over Server: 4. Cloture
-        Server->>Server: Toutes les parts sont payees
-        Server->>Server: Mise a jour portefeuille commun
-        App->>A: Depense reglee !
-        App->>B: Depense reglee !
-        App->>C: Depense reglee !
-    end
-                </pre>
-            </div>
-            <div class="diagram-card-footer">
-                <i class="fa-solid fa-circle-info"></i> Scenario complet : creation, division, notifications, paiements via Stripe/CIB et confirmation.
+    Server->>App: Depense reglee !
+                        </pre>
+                    </div>
+                </div>
+                <div class="diagram-card-footer">
+                    <i class="fa-solid fa-circle-info"></i> Scenario complet : creation, division, notifications, paiements.
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- 4. ACTIVITY DIAGRAM -->
-    <div class="diagram-section" id="activity">
-        <div class="diagram-card">
-            <div class="diagram-card-header" onclick="toggleCard(this)">
-                <div class="diagram-icon icon-activity"><i class="fa-solid fa-diagram-project"></i></div>
-                <div class="header-info">
-                    <h3>Diagramme d'Activite</h3>
+        <!-- 4. ACTIVITY DIAGRAM -->
+        <div class="diagram-section" id="activity">
+            <div class="diagram-card">
+                <div class="diagram-card-header" onclick="toggleCard(this)">
+                    <div class="diagram-icon icon-activity"><i class="fa-solid fa-diagram-project"></i></div>
+                    <div class="header-info"><h3>Diagramme d'Activite</h3></div>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-activity')"><i class="fa-solid fa-copy"></i></button>
+                        <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-activity')"><i class="fa-solid fa-expand"></i></button>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-activity')"><i class="fa-solid fa-copy"></i></button>
-                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
-                </div>
-            </div>
-            <div class="diagram-card-body">
-                <pre class="mermaid" id="mermaid-activity">
+                <div class="diagram-card-body">
+                    <div class="zoom-container" id="zoom-activity">
+                        <pre class="mermaid" id="mermaid-activity">
 flowchart TD
     Start([Debut]) --> Login[Connexion / Inscription]
     Login --> Has2FA{2FA activee ?}
-    Has2FA -->|Oui| TwoFA[Saisir code 2FA]
-    Has2FA -->|Non| Dashboard
-    TwoFA --> CodeValid{Code valide ?}
-    CodeValid -->|Oui| Dashboard[Tableau de bord]
+    Has2FA -->|Oui| TwoFA[Saisir code]
+    Has2FA -->|Non| Dashboard[Tableau de bord]
+    TwoFA --> CodeValid{Valide ?} -->|Oui| Dashboard
     CodeValid -->|Non| TwoFA
-
     Dashboard --> Choice{Action ?}
-
-    Choice -->|Ajouter amis| Invite[Envoyer invitation avec code 2FA]
-    Invite --> Friend2FA{Verification du code par l'ami}
-    Friend2FA -->|Accepte| SharedSpace[Espace partage cree]
-    Friend2FA -->|Refuse| Invite
+    Choice -->|Ajouter amis| Invite[Envoyer invitation + code 2FA]
+    Invite --> FriendAccept{Accepte ?} -->|Oui| SharedSpace[Espace partage]
+    FriendAccept -->|Non| Invite
     SharedSpace --> Dashboard
-
     Choice -->|Nouvelle depense| SelectGroup[Selectionner groupe]
-    SelectGroup --> EnterAmount[Saisir montant + description]
-    EnterAmount --> SelectCat[Choisir categorie]
-    SelectCat --> AutoSplit[Division automatique]
-    AutoSplit --> NotifyMembers[Notifier tous les membres]
-    NotifyMembers --> ViewShares[Chaque membre voit sa part]
-
-    ViewShares --> PayNow{Payer maintenant ?}
-    PayNow -->|Oui| OnlinePay[Paiement en ligne via Stripe/CIB]
+    SelectGroup --> EnterAmount[Saisir montant]
+    EnterAmount --> AutoSplit[Division automatique]
+    AutoSplit --> NotifyMembers[Notifier membres]
+    NotifyMembers --> ViewShares[Voir parts]
+    ViewShares --> PayNow{Payer ?}
+    PayNow -->|Oui| OnlinePay[Paiement Stripe/CIB]
     OnlinePay --> ConfirmPay{Confirme ?}
     ConfirmPay -->|Oui| UpdateWallet[Mise a jour portefeuille]
     ConfirmPay -->|Non| Retry[Reessayer]
     Retry --> OnlinePay
     PayNow -->|Plus tard| Pending[En attente]
-    UpdateWallet --> AllPaid{Tous ont paye ?}
+    UpdateWallet --> AllPaid{Tous paye ?}
     AllPaid -->|Oui| Close[Depense cloturee]
     AllPaid -->|Non| ViewShares
     Pending --> Close
     Close --> End([Termine])
-
     Choice -->|Explorer| Browse[Parcourir activites]
-    Browse --> Filter[Filtrer (restaurant, cinema...)]
-    Filter --> SelectPlace[Choisir un lieu]
+    Browse --> Filter[Filtrer]
+    Filter --> SelectPlace[Choisir lieu]
     SelectPlace --> SelectGroup
 
     style Start fill:#d1fae5,stroke:#059669,stroke-width:2px
     style End fill:#d1fae5,stroke:#059669,stroke-width:2px
     style Dashboard fill:#ede9fe,stroke:#7c3aed,stroke-width:2px
     style OnlinePay fill:#fff7ed,stroke:#f59e0b,stroke-width:2px
-    style SharedSpace fill:#e0e7ff,stroke:#4f46e5,stroke-width:2px
-    style Close fill:#d1fae5,stroke:#059669,stroke-width:2px
-                </pre>
-            </div>
-            <div class="diagram-card-footer">
-                <i class="fa-solid fa-circle-info"></i> Parcours complet : l'invitation d'amis utilise un code 2FA. Les paiements passent par Stripe/CIB.
+                        </pre>
+                    </div>
+                </div>
+                <div class="diagram-card-footer">
+                    <i class="fa-solid fa-circle-info"></i> Flux complet avec invitation 2FA et paiement en ligne.
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- 5. ER DIAGRAM -->
-    <div class="diagram-section" id="er">
-        <div class="diagram-card">
-            <div class="diagram-card-header" onclick="toggleCard(this)">
-                <div class="diagram-icon icon-er"><i class="fa-solid fa-database"></i></div>
-                <div class="header-info">
-                    <h3>Modele Entite-Relation (ER)</h3>
+        <!-- 5. ER DIAGRAM -->
+        <div class="diagram-section" id="er">
+            <div class="diagram-card">
+                <div class="diagram-card-header" onclick="toggleCard(this)">
+                    <div class="diagram-icon icon-er"><i class="fa-solid fa-database"></i></div>
+                    <div class="header-info"><h3>Modele Entite-Relation (ER)</h3></div>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-er')"><i class="fa-solid fa-copy"></i></button>
+                        <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-er')"><i class="fa-solid fa-expand"></i></button>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-er')"><i class="fa-solid fa-copy"></i></button>
-                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
-                </div>
-            </div>
-            <div class="diagram-card-body">
-                <pre class="mermaid" id="mermaid-er">
+                <div class="diagram-card-body">
+                    <div class="zoom-container" id="zoom-er">
+                        <pre class="mermaid" id="mermaid-er">
 erDiagram
     UTILISATEUR {
         string id PK
         string nom
         string email UK
         string telephone UK
-        string motDePasseHash
         boolean deuxFacteursActive
-        string photoProfil
-        datetime dateCreation
     }
-
     GROUPE {
         string id PK
         string nom
         string type
-        string devise
-        datetime dateCreation
     }
-
     MEMBRE_GROUPE {
         string userId PK_FK
         string groupeId PK_FK
         string role
         double balanceIndividuelle
-        datetime dateAdhesion
     }
-
     DEPENSE {
         string id PK
         string description
         double montant
         datetime date
-        string categorie
         string payeParUserId FK
         string groupeId FK
-        string activiteId FK
     }
-
     PART_DEPENSE {
         string depenseId PK_FK
         string userId PK_FK
         double montantDu
         boolean estPayee
-        datetime datePaiement
     }
-
     PORTEFEUILLE {
         string id PK
         string groupeId FK
         double balance
-        string devise
-        datetime derniereMiseAJour
     }
-
     PAIEMENT {
         string id PK
         double montant
         string methode
         string statut
         string referenceExterne
-        datetime date
         string userId FK
         string depenseId FK
     }
-
     INVITATION {
         string id PK
-        string deUserId FK
-        string aUserId FK
-        string statut
         string code2FA
-        datetime dateEnvoi
         datetime dateExpiration
     }
-
     ACTIVITE {
         string id PK
         string nom
         string type
-        string adresse
-        double prixMoyen
-        float note
-        string imageUrl
-        string description
     }
-
-    TRANSACTION_PORTEFEUILLE {
-        string id PK
-        string portefeuilleId FK
-        double montant
-        string type
-        string description
-        datetime date
-    }
-
     UTILISATEUR ||--o{ MEMBRE_GROUPE : appartient
     GROUPE ||--o{ MEMBRE_GROUPE : contient
     GROUPE ||--o{ DEPENSE : possede
@@ -803,112 +764,94 @@ erDiagram
     UTILISATEUR ||--o{ PART_DEPENSE : doit_payer
     DEPENSE ||--o{ PAIEMENT : reglee_par
     UTILISATEUR ||--o{ PAIEMENT : effectue
-    DEPENSE }o--|| ACTIVITE : reference_optionnel
     UTILISATEUR ||--o{ INVITATION : envoie
-    PORTEFEUILLE ||--o{ TRANSACTION_PORTEFEUILLE : enregistre
-                </pre>
-            </div>
-            <div class="diagram-card-footer">
-                <i class="fa-solid fa-circle-info"></i> Tables de jointure : MEMBRE_GROUPE et PART_DEPENSE. PAIEMENT contient la reference Stripe/CIB.
+                        </pre>
+                    </div>
+                </div>
+                <div class="diagram-card-footer">
+                    <i class="fa-solid fa-circle-info"></i> Tables de jointure : MEMBRE_GROUPE, PART_DEPENSE.
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- 6. COMPONENT DIAGRAM -->
-    <div class="diagram-section" id="component">
-        <div class="diagram-card">
-            <div class="diagram-card-header" onclick="toggleCard(this)">
-                <div class="diagram-icon icon-component"><i class="fa-solid fa-server"></i></div>
-                <div class="header-info">
-                    <h3>Diagramme de Composants</h3>
+        <!-- 6. COMPONENT DIAGRAM -->
+        <div class="diagram-section" id="component">
+            <div class="diagram-card">
+                <div class="diagram-card-header" onclick="toggleCard(this)">
+                    <div class="diagram-icon icon-component"><i class="fa-solid fa-server"></i></div>
+                    <div class="header-info"><h3>Diagramme de Composants</h3></div>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-component')"><i class="fa-solid fa-copy"></i></button>
+                        <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('mermaid-component')"><i class="fa-solid fa-expand"></i></button>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-component')"><i class="fa-solid fa-copy"></i></button>
-                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
-                </div>
-            </div>
-            <div class="diagram-card-body">
-                <pre class="mermaid" id="mermaid-component">
+                <div class="diagram-card-body">
+                    <div class="zoom-container" id="zoom-component">
+                        <pre class="mermaid" id="mermaid-component">
 flowchart TB
     subgraph MOBILE["Application Mobile (React Native)"]
-        direction TB
         UI["Interface Utilisateur"]
-        AuthModule["Module Auth (Login, 2FA)"]
-        FriendsModule["Module Amis (Invitations)"]
-        ExpenseModule["Module Depenses (Split)"]
-        WalletModule["Module Portefeuille"]
-        ActivityModule["Module Activites"]
-        PaymentModule["Module Paiement"]
-        NotificationModule["Notifications Push"]
+        AuthModule["Module Auth (2FA)"]
+        FriendsModule["Module Amis"]
+        ExpenseModule["Module Depenses"]
+        WalletModule["Portefeuille"]
+        PaymentModule["Paiement"]
+        ActivityModule["Activites"]
     end
-
-    subgraph BACKEND["Backend (Node.js/Express)"]
+    subgraph BACKEND["Backend Node.js"]
         APIGateway["API Gateway"]
-        AuthService["Service Auth (JWT, 2FA)"]
+        AuthService["Auth Service"]
         GroupService["Service Groupe"]
         ExpenseService["Service Depense"]
         WalletService["Service Portefeuille"]
-        PaymentService["Service Paiement (Stripe/CIB)"]
-        ActivityService["Service Activite"]
-        NotificationService["Service Notification (FCM)"]
+        PaymentService["Service Paiement (Stripe)"]
     end
-
     subgraph DATA["Donnees"]
-        MainDB["(PostgreSQL)"]
-        Cache["(Redis)"]
+        MainDB["PostgreSQL"]
+        Cache["Redis"]
     end
-
     subgraph EXTERNAL["Services Externes"]
-        StripeAPI["Stripe / CIB (Paiement)"]
-        FCM["Firebase Cloud Messaging"]
-        EmailService["SendGrid (Emails)"]
+        StripeAPI["Stripe / CIB"]
+        FCM["Firebase"]
     end
-
     UI --> AuthModule
     UI --> FriendsModule
     UI --> ExpenseModule
-    UI --> WalletModule
-    UI --> ActivityModule
-    UI --> PaymentModule
-    UI --> NotificationModule
-
     AuthModule --> APIGateway
     FriendsModule --> APIGateway
     ExpenseModule --> APIGateway
     WalletModule --> APIGateway
-    ActivityModule --> APIGateway
     PaymentModule --> APIGateway
-    NotificationModule --> APIGateway
-
     APIGateway --> AuthService
     APIGateway --> GroupService
     APIGateway --> ExpenseService
     APIGateway --> WalletService
     APIGateway --> PaymentService
-    APIGateway --> ActivityService
-    APIGateway --> NotificationService
-
     AuthService --> MainDB
-    AuthService --> Cache
     GroupService --> MainDB
     ExpenseService --> MainDB
     WalletService --> MainDB
-    PaymentService --> MainDB
-    ActivityService --> MainDB
-    NotificationService --> MainDB
-
     PaymentService --> StripeAPI
-    NotificationService --> FCM
-    NotificationService --> EmailService
-
-    style MOBILE fill:#ede9fe,stroke:#7c3aed,stroke-width:2px
-    style BACKEND fill:#e0e7ff,stroke:#4f46e5,stroke-width:2px
-    style DATA fill:#fef3c7,stroke:#d97706,stroke-width:2px
-    style EXTERNAL fill:#d1fae5,stroke:#059669,stroke-width:2px
-                </pre>
+                        </pre>
+                    </div>
+                </div>
+                <div class="diagram-card-footer">
+                    <i class="fa-solid fa-circle-info"></i> Architecture : React Native, Node.js, PostgreSQL, Stripe/CIB.
+                </div>
             </div>
-            <div class="diagram-card-footer">
-                <i class="fa-solid fa-circle-info"></i> Architecture : React Native, Node.js, PostgreSQL, Redis. Paiements via Stripe/CIB. Notifications push avec Firebase.
+        </div>
+    </main>
+
+    <!-- Fullscreen Modal -->
+    <div class="fullscreen-modal" id="fullscreenModal">
+        <div class="modal-content" id="modalContent">
+            <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+            <div class="zoom-container" id="modalZoomContainer" style="width:100%;height:100%;"></div>
+            <div class="modal-zoom-controls">
+                <button id="modalZoomIn"><i class="fa-solid fa-plus"></i></button>
+                <button id="modalZoomOut"><i class="fa-solid fa-minus"></i></button>
+                <button id="modalZoomReset"><i class="fa-solid fa-rotate-left"></i></button>
             </div>
         </div>
     </div>
@@ -917,64 +860,31 @@ flowchart TB
     <div class="toast" id="toast"></div>
 
     <script>
-        // Mermaid init
+        // ============ Mermaid init ============
         mermaid.initialize({
             startOnLoad: true,
             theme: 'default',
             securityLevel: 'loose',
             fontFamily: 'Poppins, Cairo, sans-serif',
-            flowchart: {
-                useMaxWidth: true,
-                htmlLabels: true,
-                curve: 'basis',
-                padding: 16,
-                nodeSpacing: 30,
-                rankSpacing: 40,
-            },
-            sequence: {
-                useMaxWidth: true,
-                actorMargin: 40,
-                messageMargin: 20,
-                boxMargin: 8,
-                mirrorActors: false,
-                wrap: true,
-                width: 140,
-            },
-            classDiagram: {
-                useMaxWidth: true,
-                padding: 12,
-            },
-            er: {
-                useMaxWidth: true,
-                padding: 12,
-            },
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 16 },
+            sequence: { useMaxWidth: true, actorMargin: 40, messageMargin: 20, wrap: true, width: 140 },
+            classDiagram: { useMaxWidth: true, padding: 12 },
+            er: { useMaxWidth: true, padding: 12 },
         });
 
-        // Toggle card collapse
+        // ============ Collapse ============
         function toggleCard(header) {
             header.closest('.diagram-card').classList.toggle('collapsed');
         }
 
-        // Copy diagram code
+        // ============ Copy Code ============
         function copyCode(mermaidId) {
             const pre = document.getElementById(mermaidId);
             if (!pre) return;
-            const code = pre.textContent.trim();
-            navigator.clipboard.writeText(code).then(() => {
-                showToast('Code Mermaid copie !');
-            }).catch(() => {
-                const textarea = document.createElement('textarea');
-                textarea.value = code;
-                textarea.style.position = 'fixed';
-                textarea.style.opacity = '0';
-                document.body.appendChild(textarea);
-                textarea.select();
-                try { document.execCommand('copy'); showToast('Copie reussie'); } catch (e) { showToast('Erreur de copie'); }
-                document.body.removeChild(textarea);
-            });
+            navigator.clipboard.writeText(pre.textContent.trim()).then(() => showToast('Code Mermaid copie !'));
         }
 
-        // Toast
+        // ============ Toast ============
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
@@ -983,41 +893,253 @@ flowchart TB
             toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // Mobile menu
-        const overlay = document.getElementById('menuOverlay');
-        const panel = document.getElementById('menuPanel');
-        const openBtn = document.getElementById('menuOpenBtn');
-        const closeBtn = document.getElementById('menuCloseBtn');
-        const navLinks = document.querySelectorAll('.menu-links a');
+        // ============ Zoom & Pan ============
+        function setupZoomPan(container) {
+            let scale = 1;
+            let panX = 0, panY = 0;
+            let isDragging = false;
+            let startX, startY;
+            let lastPanX, lastPanY;
+            const el = container;
 
-        function openMenu() {
-            overlay.classList.add('active');
-            panel.classList.add('active');
-        }
-        function closeMenu() {
-            overlay.classList.remove('active');
-            panel.classList.remove('active');
-        }
-        openBtn.addEventListener('click', openMenu);
-        closeBtn.addEventListener('click', closeMenu);
-        overlay.addEventListener('click', closeMenu);
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                closeMenu();
-                const targetId = link.getAttribute('href').substring(1);
-                const target = document.getElementById(targetId);
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            function applyTransform() {
+                el.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            }
+
+            el.addEventListener('wheel', (e) => {
                 e.preventDefault();
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(3, Math.max(0.3, scale * delta));
+                const rect = el.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                const sx = (mx - panX) / scale;
+                const sy = (my - panY) / scale;
+                panX = mx - sx * newScale;
+                panY = my - sy * newScale;
+                scale = newScale;
+                applyTransform();
+            });
+
+            el.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                lastPanX = panX;
+                lastPanY = panY;
+                el.classList.add('dragging');
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                panX = lastPanX + (e.clientX - startX);
+                panY = lastPanY + (e.clientY - startY);
+                applyTransform();
+            });
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                el.classList.remove('dragging');
+            });
+
+            // Touch events
+            let touches = [];
+            el.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                touches = [...e.touches];
+                if (touches.length === 1) {
+                    isDragging = true;
+                    startX = touches[0].clientX;
+                    startY = touches[0].clientY;
+                    lastPanX = panX;
+                    lastPanY = panY;
+                } else if (touches.length === 2) {
+                    isDragging = false;
+                    const dx = touches[0].clientX - touches[1].clientX;
+                    const dy = touches[0].clientY - touches[1].clientY;
+                    initialPinchDistance = Math.hypot(dx, dy);
+                    initialScale = scale;
+                }
+            });
+            let initialPinchDistance, initialScale;
+            el.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                touches = [...e.touches];
+                if (touches.length === 1 && isDragging) {
+                    panX = lastPanX + (touches[0].clientX - startX);
+                    panY = lastPanY + (touches[0].clientY - startY);
+                    applyTransform();
+                } else if (touches.length === 2) {
+                    const dx = touches[0].clientX - touches[1].clientX;
+                    const dy = touches[0].clientY - touches[1].clientY;
+                    const dist = Math.hypot(dx, dy);
+                    const newScale = Math.min(3, Math.max(0.3, initialScale * (dist / initialPinchDistance)));
+                    const rect = el.getBoundingClientRect();
+                    const mx = (touches[0].clientX + touches[1].clientX) / 2 - rect.left;
+                    const my = (touches[0].clientY + touches[1].clientY) / 2 - rect.top;
+                    const sx = (mx - panX) / scale;
+                    const sy = (my - panY) / scale;
+                    panX = mx - sx * newScale;
+                    panY = my - sy * newScale;
+                    scale = newScale;
+                    applyTransform();
+                }
+            });
+            el.addEventListener('touchend', () => { isDragging = false; });
+        }
+
+        document.querySelectorAll('.zoom-container').forEach(c => setupZoomPan(c));
+
+        // ============ Fullscreen ============
+        const modal = document.getElementById('fullscreenModal');
+        const modalZoomContainer = document.getElementById('modalZoomContainer');
+        let modalCurrentZoom = { panX: 0, panY: 0, scale: 1 };
+        let modalZoomInstance = null;
+
+        function openFullscreen(mermaidId) {
+            const sourcePre = document.getElementById(mermaidId);
+            if (!sourcePre) return;
+            const clone = sourcePre.cloneNode(true);
+            modalZoomContainer.innerHTML = '';
+            modalZoomContainer.appendChild(clone);
+            // Re-run mermaid on the clone? Better to take the SVG from the original and copy it.
+            // Simpler: move the original's SVG into modal. We'll take the innerHTML of parent.
+            const originalContainer = sourcePre.closest('.zoom-container');
+            const svg = originalContainer.querySelector('svg');
+            if (svg) {
+                modalZoomContainer.innerHTML = '';
+                modalZoomContainer.appendChild(svg.cloneNode(true));
+            } else {
+                // If not yet rendered, wait a bit
+                setTimeout(() => {
+                    const svg2 = originalContainer.querySelector('svg');
+                    if (svg2) {
+                        modalZoomContainer.innerHTML = '';
+                        modalZoomContainer.appendChild(svg2.cloneNode(true));
+                    }
+                }, 200);
+            }
+            modal.classList.add('active');
+            modalZoomContainer.style.transform = 'translate(0px,0px) scale(1)';
+            // setup zoom pan on modal container
+            if (modalZoomInstance) {
+                // cleanup previous? we'll just re-setup
+            }
+            setupZoomPan(modalZoomContainer);
+        }
+
+        document.getElementById('modalClose').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+        document.getElementById('modalZoomIn').addEventListener('click', () => {
+            const el = modalZoomContainer;
+            const currentScale = parseFloat(el.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
+            const newScale = Math.min(3, currentScale * 1.2);
+            el.style.transform = el.style.transform.replace(/scale\([^)]+\)/, `scale(${newScale})`);
+        });
+        document.getElementById('modalZoomOut').addEventListener('click', () => {
+            const el = modalZoomContainer;
+            const currentScale = parseFloat(el.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
+            const newScale = Math.max(0.3, currentScale / 1.2);
+            el.style.transform = el.style.transform.replace(/scale\([^)]+\)/, `scale(${newScale})`);
+        });
+        document.getElementById('modalZoomReset').addEventListener('click', () => {
+            modalZoomContainer.style.transform = 'translate(0px,0px) scale(1)';
+        });
+
+        // ============ Mobile Sidebar ============
+        const sidebar = document.getElementById('sidebar');
+        const mobileToggle = document.getElementById('mobileSidebarToggle');
+        mobileToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) sidebar.classList.remove('open');
             });
         });
 
-        // Resize handler
-        window.addEventListener('resize', () => {
-            document.querySelectorAll('.mermaid svg').forEach(svg => {
-                svg.style.maxWidth = '100%';
-                svg.style.height = 'auto';
+        // Active nav link highlight
+        const sections = document.querySelectorAll('.diagram-section, .home-section');
+        const navLinksAll = document.querySelectorAll('.sidebar-nav a');
+        function updateActiveLink() {
+            let current = '';
+            const scrollPos = window.scrollY + 80;
+            sections.forEach(s => {
+                if (s.offsetTop <= scrollPos && s.offsetTop + s.offsetHeight > scrollPos) {
+                    current = s.getAttribute('id');
+                }
             });
-        });
+            navLinksAll.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('data-section') === current) a.classList.add('active');
+            });
+        }
+        window.addEventListener('scroll', updateActiveLink);
+        updateActiveLink();
+
+        // ============ PWA & Icon ============
+        function generateIcon() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 192;
+            canvas.height = 192;
+            const ctx = canvas.getContext('2d');
+            // Background gradient
+            const grad = ctx.createLinearGradient(0,0,192,192);
+            grad.addColorStop(0, '#8b5cf6');
+            grad.addColorStop(1, '#f59e0b');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(96,96,80,0,Math.PI*2);
+            ctx.fill();
+            // Heart and hand using Font Awesome unicode - we can't easily render, so draw a simple heart
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 80px "Font Awesome 5 Free", "Poppins", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            // heart icon unicode: \f004? Actually hand-holding-heart is \f4be
+            ctx.fillText('\uf4be', 96, 96);
+            return canvas.toDataURL('image/png');
+        }
+
+        const iconDataUrl = generateIcon();
+        document.getElementById('favicon').href = iconDataUrl;
+        document.getElementById('appleIcon').href = iconDataUrl;
+
+        // Manifest via blob
+        const manifest = {
+            name: 'SplitMate UML',
+            short_name: 'SplitMate',
+            start_url: '.',
+            display: 'standalone',
+            background_color: '#6c3ce0',
+            theme_color: '#6c3ce0',
+            icons: [
+                { src: iconDataUrl, sizes: '192x192', type: 'image/png' }
+            ]
+        };
+        const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+        const manifestUrl = URL.createObjectURL(blob);
+        document.getElementById('manifestLink').href = manifestUrl;
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => {
+                    e.waitUntil(
+                        caches.open('splitmate-v1').then(cache => {
+                            return cache.addAll(['./']);
+                        })
+                    );
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        caches.match(e.request).then(response => response || fetch(e.request))
+                    );
+                });
+            `;
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl);
+        }
     </script>
 </body>
 </html>
