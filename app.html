@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SplitMate – Diagrammes UML</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js">
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c3ce0;
+            --primary-light: #8b5cf6;
+            --accent: #f59e0b;
+            --bg: #f8f7fc;
+            --surface: #ffffff;
+            --text: #1e1b2e;
+            --text-light: #5c5776;
+            --border: #e2e0eb;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            --radius: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px 12px 32px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        .nav-brand i {
+            font-size: 1.4rem;
+            color: var(--accent);
+        }
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+        .menu-btn:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        /* Menu overlay */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .menu-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 80%;
+            max-width: 320px;
+            height: 100%;
+            background: #fff;
+            z-index: 201;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 20px;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+        }
+        .menu-panel.active {
+            transform: translateX(0);
+        }
+        .menu-close {
+            align-self: flex-end;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .menu-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            padding: 12px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+        }
+        .menu-links a i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+        .menu-links a:hover {
+            background: #f4f1fd;
+        }
+
+        /* Diagram cards */
+        .diagram-section {
+            width: 100%;
+            margin-bottom: 28px;
+            scroll-margin-top: 80px;
+        }
+        .diagram-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .diagram-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            background: #faf9fe;
+            cursor: pointer;
+            user-select: none;
+        }
+        .diagram-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .icon-use-case { background: #ede9fe; color: #7c3aed; }
+        .icon-class { background: #fce7f3; color: #db2777; }
+        .icon-sequence { background: #dbeafe; color: #2563eb; }
+        .icon-activity { background: #fef3c7; color: #d97706; }
+        .icon-er { background: #d1fae5; color: #059669; }
+        .icon-component { background: #e0e7ff; color: #4f46e5; }
+
+        .header-info h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.3;
+        }
+        .header-desc {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-top: 2px;
+            display: none;
+        }
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+        .btn-icon:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .collapse-arrow {
+            transition: transform 0.2s;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        .diagram-card.collapsed .collapse-arrow {
+            transform: rotate(-90deg);
+        }
+        .diagram-card-body {
+            padding: 10px 6px 14px;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+            background: #fdfdfe;
+            min-height: 200px;
+        }
+        .diagram-card.collapsed .diagram-card-body {
+            display: none;
+        }
+        .diagram-card-footer {
+            padding: 8px 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.7rem;
+            color: var(--text-light);
+            background: #faf9fe;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .diagram-card.collapsed .diagram-card-footer {
+            display: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1a1035;
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media print {
+            .top-nav, .menu-overlay, .menu-panel, .btn-icon, .toast {
+                display: none !important;
+            }
+            body {
+                padding: 0;
+                max-width: 100%;
+            }
+            .diagram-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            .diagram-card-body {
+                overflow: visible;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-brand">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <span>SplitMate</span>
+        </div>
+        <button class="menu-btn" id="menuOpenBtn" aria-label="Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Menu Overlay and Panel -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <div class="menu-panel" id="menuPanel">
+        <button class="menu-close" id="menuCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+        <div class="menu-links">
+            <a href="#use-case" class="nav-link"><i class="fa-solid fa-person-circle-check"></i> Cas d'utilisation</a>
+            <a href="#class" class="nav-link"><i class="fa-solid fa-cubes"></i> Diagramme de classes</a>
+            <a href="#sequence" class="nav-link"><i class="fa-solid fa-arrows-spin"></i> Sequence paiement</a>
+            <a href="#activity" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Activite</a>
+            <a href="#er" class="nav-link"><i class="fa-solid fa-database"></i> Modele Entite-Relation</a>
+            <a href="#component" class="nav-link"><i class="fa-solid fa-server"></i> Composants</a>
+        </div>
+    </div>
+
+    <!-- 1. USE CASE DIAGRAM -->
+    <div class="diagram-section" id="use-case">
+        <div class="diagram-card">
+            <div class="diagram-card-header" onclick="toggleCard(this)">
+                <div class="diagram-icon icon-use-case"><i class="fa-solid fa-person-circle-check"></i></div>
+                <div class="header-info">
+                    <h3>Diagramme de Cas d'Utilisation</h3>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-use-case')"><i class="fa-solid fa-copy"></i></button>
+                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                </div>
+            </div>
+            <div class="diagram-card-body">
+                <pre class="mermaid" id="mermaid-use-case">
+flowchart TB
+    subgraph SYSTEM["Application SplitMate"]
+        direction TB
+        UC1["Se connecter / inscrire"]
+        UC2["Authentification 2FA"]
+        UC3["Ajouter des amis (invitation)"]
+        UC4["Creer un espace partage"]
+        UC5["Ajouter une depense"]
+        UC6["Division automatique des frais"]
+        UC7["Payer en ligne (Stripe / CIB)"]
+        UC8["Consulter le portefeuille commun"]
+        UC9["Parcourir restaurants / cinemas"]
+        UC10["Proposer une activite"]
+    end
+
+    USER["Utilisateur\n(Amis, couples)"]
+    ADMIN["Administrateur"]
+    PAYMENT["Passerelle de paiement\n(Stripe, CIB)"]
+
+    USER --> UC1
+    USER --> UC2
+    USER --> UC3
+    USER --> UC4
+    USER --> UC5
+    USER --> UC6
+    USER --> UC7
+    USER --> UC8
+    USER --> UC9
+    USER --> UC10
+    ADMIN --> UC10
+    PAYMENT --> UC7
+
+    style SYSTEM fill:#f5f3ff,stroke:#7c3aed,stroke-width:2px,color:#1e1b2e
+    style USER fill:#e0e7ff,stroke:#4f46e5,stroke-width:2px,color:#1e1b2e
+    style ADMIN fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#1e1b2e
+    style PAYMENT fill:#d1fae5,stroke:#059669,stroke-width:2px,color:#1e1b2e
+    style UC7 fill:#fff7ed,stroke:#f59e0b,stroke-width:2px
+                </pre>
+            </div>
+            <div class="diagram-card-footer">
+                <i class="fa-solid fa-circle-info"></i> Acteurs : Utilisateur, Admin, Passerelle de paiement externe. L'invitation d'amis utilise un code de verification 2FA.
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. CLASS DIAGRAM -->
+    <div class="diagram-section" id="class">
+        <div class="diagram-card">
+            <div class="diagram-card-header" onclick="toggleCard(this)">
+                <div class="diagram-icon icon-class"><i class="fa-solid fa-cubes"></i></div>
+                <div class="header-info">
+                    <h3>Diagramme de Classes</h3>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-class')"><i class="fa-solid fa-copy"></i></button>
+                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                </div>
+            </div>
+            <div class="diagram-card-body">
+                <pre class="mermaid" id="mermaid-class">
+classDiagram
+    class Utilisateur {
+        +String id
+        +String nom
+        +String email
+        +String telephone
+        +String motDePasseHash
+        +Boolean deuxFacteursActive
+        +DateTime dateCreation
+        +String photoProfil
+        +sinscrire(email, mdp) Boolean
+        +seConnecter(email, mdp) Session
+        +activer2FA() void
+        +mettreAJourProfil() void
+    }
+
+    class Groupe {
+        +String id
+        +String nom
+        +String type
+        +DateTime dateCreation
+        +Double soldeTotal
+        +String devise
+        +ajouterMembre(userId) void
+        +supprimerMembre(userId) void
+        +calculerSolde() Double
+        +getMembres() List~Utilisateur~
+    }
+
+    class Depense {
+        +String id
+        +String description
+        +Double montant
+        +DateTime date
+        +String categorie
+        +String payeParUserId
+        +String groupeId
+        +String activiteId
+        +ajouterDepense() Depense
+        +diviserEquitablement() Map
+        +getPartParPersonne() Double
+        +getStatutPaiements() String
+    }
+
+    class Portefeuille {
+        +String id
+        +String groupeId
+        +Double balance
+        +String devise
+        +List~Transaction~ transactions
+        +consulterSolde() Double
+        +ajouterFonds(montant) void
+        +debiter(montant) Boolean
+    }
+
+    class Paiement {
+        +String id
+        +Double montant
+        +String methode
+        +String statut
+        +DateTime date
+        +String userId
+        +String depenseId
+        +String referenceExterne
+        +effectuerPaiement() Boolean
+        +verifierStatut() String
+        +rembourser() Boolean
+    }
+
+    class Activite {
+        +String id
+        +String nom
+        +String type
+        +String adresse
+        +Double prixMoyen
+        +Float note
+        +String imageUrl
+        +String description
+        +getDetails() Activite
+        +filtrerParType(type) List~Activite~
+        +filtrerParPrix(range) List~Activite~
+    }
+
+    class Invitation {
+        +String id
+        +String deUserId
+        +String aUserId
+        +String statut
+        +String code2FA
+        +DateTime dateEnvoi
+        +DateTime dateExpiration
+        +envoyer() Boolean
+        +accepter(code2FA) Boolean
+        +refuser() void
+        +verifierCode(code) Boolean
+    }
+
+    class MembreGroupe {
+        +String userId
+        +String groupeId
+        +String role
+        +DateTime dateAdhesion
+        +Double balanceIndividuelle
+    }
+
+    Utilisateur "1" --> "many" Invitation : envoie
+    Utilisateur "1" --> "many" Invitation : reçoit
+    Utilisateur "many" <--> "many" Groupe : via MembreGroupe
+    Groupe "1" --> "many" Depense : contient
+    Groupe "1" --> "1" Portefeuille : possède
+    Depense "1" --> "many" Paiement : génère
+    Utilisateur "1" --> "many" Paiement : effectue
+    Depense "many" --> "0..1" Activite : liée à
+    MembreGroupe ..> Utilisateur
+    MembreGroupe ..> Groupe
+                </pre>
+            </div>
+            <div class="diagram-card-footer">
+                <i class="fa-solid fa-circle-info"></i> L'invitation contient un code 2FA. La classe Portefeuille est liee 1:1 au Groupe. Paiement gere les transactions Stripe/CIB.
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SEQUENCE DIAGRAM -->
+    <div class="diagram-section" id="sequence">
+        <div class="diagram-card">
+            <div class="diagram-card-header" onclick="toggleCard(this)">
+                <div class="diagram-icon icon-sequence"><i class="fa-solid fa-arrows-spin"></i></div>
+                <div class="header-info">
+                    <h3>Diagramme de Sequence – Paiement partage</h3>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-sequence')"><i class="fa-solid fa-copy"></i></button>
+                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                </div>
+            </div>
+            <div class="diagram-card-body">
+                <pre class="mermaid" id="mermaid-sequence">
+sequenceDiagram
+    actor A as Ahmed
+    actor B as Bilal
+    actor C as Chaima
+    participant App as SplitMate App
+    participant Server as Serveur
+    participant Pay as Passerelle de paiement (Stripe/CIB)
+
+    Note over A,C: Membres du meme espace partage
+
+    rect rgb(245, 243, 255)
+        Note over A,Server: 1. Creation de la depense
+        A->>App: Ajoute depense "Restaurant 9000 DA"
+        App->>Server: POST /expenses {montant:9000, groupeId:"G1"}
+        Server->>Server: Division 9000/3 = 3000 DA/pers.
+        Server-->>App: Depense creee + parts
+        App->>B: Notification : vous devez 3000 DA
+        App->>C: Notification : vous devez 3000 DA
+    end
+
+    rect rgb(236, 252, 243)
+        Note over B,Pay: 2. Paiement de Bilal
+        B->>App: Consulte sa part (3000 DA)
+        B->>App: Clique "Payer maintenant"
+        App->>Pay: Requete paiement 3000 DA (Stripe/CIB)
+        Pay-->>Server: Webhook confirmation paiement
+        Server->>Server: Mise a jour statut
+        Server-->>App: Paiement Bilal confirme
+        App->>A: Notification : Bilal a paye
+        App->>C: Notification : Bilal a paye
+    end
+
+    rect rgb(254, 243, 199)
+        Note over C,Pay: 3. Paiement de Chaima
+        C->>App: Consulte sa part (3000 DA)
+        C->>App: Effectue le paiement
+        App->>Pay: Requete paiement 3000 DA
+        Pay-->>Server: Webhook confirmation
+        Server-->>App: Paiement Chaima confirme
+        App->>A: Notification : Chaima a paye
+        App->>B: Notification : Chaima a paye
+    end
+
+    rect rgb(232, 240, 255)
+        Note over Server: 4. Cloture
+        Server->>Server: Toutes les parts sont payees
+        Server->>Server: Mise a jour portefeuille commun
+        App->>A: Depense reglee !
+        App->>B: Depense reglee !
+        App->>C: Depense reglee !
+    end
+                </pre>
+            </div>
+            <div class="diagram-card-footer">
+                <i class="fa-solid fa-circle-info"></i> Scenario complet : creation, division, notifications, paiements via Stripe/CIB et confirmation.
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. ACTIVITY DIAGRAM -->
+    <div class="diagram-section" id="activity">
+        <div class="diagram-card">
+            <div class="diagram-card-header" onclick="toggleCard(this)">
+                <div class="diagram-icon icon-activity"><i class="fa-solid fa-diagram-project"></i></div>
+                <div class="header-info">
+                    <h3>Diagramme d'Activite</h3>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-activity')"><i class="fa-solid fa-copy"></i></button>
+                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                </div>
+            </div>
+            <div class="diagram-card-body">
+                <pre class="mermaid" id="mermaid-activity">
+flowchart TD
+    Start([Debut]) --> Login[Connexion / Inscription]
+    Login --> Has2FA{2FA activee ?}
+    Has2FA -->|Oui| TwoFA[Saisir code 2FA]
+    Has2FA -->|Non| Dashboard
+    TwoFA --> CodeValid{Code valide ?}
+    CodeValid -->|Oui| Dashboard[Tableau de bord]
+    CodeValid -->|Non| TwoFA
+
+    Dashboard --> Choice{Action ?}
+
+    Choice -->|Ajouter amis| Invite[Envoyer invitation avec code 2FA]
+    Invite --> Friend2FA{Verification du code par l'ami}
+    Friend2FA -->|Accepte| SharedSpace[Espace partage cree]
+    Friend2FA -->|Refuse| Invite
+    SharedSpace --> Dashboard
+
+    Choice -->|Nouvelle depense| SelectGroup[Selectionner groupe]
+    SelectGroup --> EnterAmount[Saisir montant + description]
+    EnterAmount --> SelectCat[Choisir categorie]
+    SelectCat --> AutoSplit[Division automatique]
+    AutoSplit --> NotifyMembers[Notifier tous les membres]
+    NotifyMembers --> ViewShares[Chaque membre voit sa part]
+
+    ViewShares --> PayNow{Payer maintenant ?}
+    PayNow -->|Oui| OnlinePay[Paiement en ligne via Stripe/CIB]
+    OnlinePay --> ConfirmPay{Confirme ?}
+    ConfirmPay -->|Oui| UpdateWallet[Mise a jour portefeuille]
+    ConfirmPay -->|Non| Retry[Reessayer]
+    Retry --> OnlinePay
+    PayNow -->|Plus tard| Pending[En attente]
+    UpdateWallet --> AllPaid{Tous ont paye ?}
+    AllPaid -->|Oui| Close[Depense cloturee]
+    AllPaid -->|Non| ViewShares
+    Pending --> Close
+    Close --> End([Termine])
+
+    Choice -->|Explorer| Browse[Parcourir activites]
+    Browse --> Filter[Filtrer (restaurant, cinema...)]
+    Filter --> SelectPlace[Choisir un lieu]
+    SelectPlace --> SelectGroup
+
+    style Start fill:#d1fae5,stroke:#059669,stroke-width:2px
+    style End fill:#d1fae5,stroke:#059669,stroke-width:2px
+    style Dashboard fill:#ede9fe,stroke:#7c3aed,stroke-width:2px
+    style OnlinePay fill:#fff7ed,stroke:#f59e0b,stroke-width:2px
+    style SharedSpace fill:#e0e7ff,stroke:#4f46e5,stroke-width:2px
+    style Close fill:#d1fae5,stroke:#059669,stroke-width:2px
+                </pre>
+            </div>
+            <div class="diagram-card-footer">
+                <i class="fa-solid fa-circle-info"></i> Parcours complet : l'invitation d'amis utilise un code 2FA. Les paiements passent par Stripe/CIB.
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. ER DIAGRAM -->
+    <div class="diagram-section" id="er">
+        <div class="diagram-card">
+            <div class="diagram-card-header" onclick="toggleCard(this)">
+                <div class="diagram-icon icon-er"><i class="fa-solid fa-database"></i></div>
+                <div class="header-info">
+                    <h3>Modele Entite-Relation (ER)</h3>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-er')"><i class="fa-solid fa-copy"></i></button>
+                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                </div>
+            </div>
+            <div class="diagram-card-body">
+                <pre class="mermaid" id="mermaid-er">
+erDiagram
+    UTILISATEUR {
+        string id PK
+        string nom
+        string email UK
+        string telephone UK
+        string motDePasseHash
+        boolean deuxFacteursActive
+        string photoProfil
+        datetime dateCreation
+    }
+
+    GROUPE {
+        string id PK
+        string nom
+        string type
+        string devise
+        datetime dateCreation
+    }
+
+    MEMBRE_GROUPE {
+        string userId PK_FK
+        string groupeId PK_FK
+        string role
+        double balanceIndividuelle
+        datetime dateAdhesion
+    }
+
+    DEPENSE {
+        string id PK
+        string description
+        double montant
+        datetime date
+        string categorie
+        string payeParUserId FK
+        string groupeId FK
+        string activiteId FK
+    }
+
+    PART_DEPENSE {
+        string depenseId PK_FK
+        string userId PK_FK
+        double montantDu
+        boolean estPayee
+        datetime datePaiement
+    }
+
+    PORTEFEUILLE {
+        string id PK
+        string groupeId FK
+        double balance
+        string devise
+        datetime derniereMiseAJour
+    }
+
+    PAIEMENT {
+        string id PK
+        double montant
+        string methode
+        string statut
+        string referenceExterne
+        datetime date
+        string userId FK
+        string depenseId FK
+    }
+
+    INVITATION {
+        string id PK
+        string deUserId FK
+        string aUserId FK
+        string statut
+        string code2FA
+        datetime dateEnvoi
+        datetime dateExpiration
+    }
+
+    ACTIVITE {
+        string id PK
+        string nom
+        string type
+        string adresse
+        double prixMoyen
+        float note
+        string imageUrl
+        string description
+    }
+
+    TRANSACTION_PORTEFEUILLE {
+        string id PK
+        string portefeuilleId FK
+        double montant
+        string type
+        string description
+        datetime date
+    }
+
+    UTILISATEUR ||--o{ MEMBRE_GROUPE : appartient
+    GROUPE ||--o{ MEMBRE_GROUPE : contient
+    GROUPE ||--o{ DEPENSE : possede
+    GROUPE ||--|| PORTEFEUILLE : associe
+    DEPENSE ||--o{ PART_DEPENSE : divisee_en
+    UTILISATEUR ||--o{ PART_DEPENSE : doit_payer
+    DEPENSE ||--o{ PAIEMENT : reglee_par
+    UTILISATEUR ||--o{ PAIEMENT : effectue
+    DEPENSE }o--|| ACTIVITE : reference_optionnel
+    UTILISATEUR ||--o{ INVITATION : envoie
+    PORTEFEUILLE ||--o{ TRANSACTION_PORTEFEUILLE : enregistre
+                </pre>
+            </div>
+            <div class="diagram-card-footer">
+                <i class="fa-solid fa-circle-info"></i> Tables de jointure : MEMBRE_GROUPE et PART_DEPENSE. PAIEMENT contient la reference Stripe/CIB.
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. COMPONENT DIAGRAM -->
+    <div class="diagram-section" id="component">
+        <div class="diagram-card">
+            <div class="diagram-card-header" onclick="toggleCard(this)">
+                <div class="diagram-icon icon-component"><i class="fa-solid fa-server"></i></div>
+                <div class="header-info">
+                    <h3>Diagramme de Composants</h3>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" title="Copier le code" onclick="event.stopPropagation(); copyCode('mermaid-component')"><i class="fa-solid fa-copy"></i></button>
+                    <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                </div>
+            </div>
+            <div class="diagram-card-body">
+                <pre class="mermaid" id="mermaid-component">
+flowchart TB
+    subgraph MOBILE["Application Mobile (React Native)"]
+        direction TB
+        UI["Interface Utilisateur"]
+        AuthModule["Module Auth (Login, 2FA)"]
+        FriendsModule["Module Amis (Invitations)"]
+        ExpenseModule["Module Depenses (Split)"]
+        WalletModule["Module Portefeuille"]
+        ActivityModule["Module Activites"]
+        PaymentModule["Module Paiement"]
+        NotificationModule["Notifications Push"]
+    end
+
+    subgraph BACKEND["Backend (Node.js/Express)"]
+        APIGateway["API Gateway"]
+        AuthService["Service Auth (JWT, 2FA)"]
+        GroupService["Service Groupe"]
+        ExpenseService["Service Depense"]
+        WalletService["Service Portefeuille"]
+        PaymentService["Service Paiement (Stripe/CIB)"]
+        ActivityService["Service Activite"]
+        NotificationService["Service Notification (FCM)"]
+    end
+
+    subgraph DATA["Donnees"]
+        MainDB["(PostgreSQL)"]
+        Cache["(Redis)"]
+    end
+
+    subgraph EXTERNAL["Services Externes"]
+        StripeAPI["Stripe / CIB (Paiement)"]
+        FCM["Firebase Cloud Messaging"]
+        EmailService["SendGrid (Emails)"]
+    end
+
+    UI --> AuthModule
+    UI --> FriendsModule
+    UI --> ExpenseModule
+    UI --> WalletModule
+    UI --> ActivityModule
+    UI --> PaymentModule
+    UI --> NotificationModule
+
+    AuthModule --> APIGateway
+    FriendsModule --> APIGateway
+    ExpenseModule --> APIGateway
+    WalletModule --> APIGateway
+    ActivityModule --> APIGateway
+    PaymentModule --> APIGateway
+    NotificationModule --> APIGateway
+
+    APIGateway --> AuthService
+    APIGateway --> GroupService
+    APIGateway --> ExpenseService
+    APIGateway --> WalletService
+    APIGateway --> PaymentService
+    APIGateway --> ActivityService
+    APIGateway --> NotificationService
+
+    AuthService --> MainDB
+    AuthService --> Cache
+    GroupService --> MainDB
+    ExpenseService --> MainDB
+    WalletService --> MainDB
+    PaymentService --> MainDB
+    ActivityService --> MainDB
+    NotificationService --> MainDB
+
+    PaymentService --> StripeAPI
+    NotificationService --> FCM
+    NotificationService --> EmailService
+
+    style MOBILE fill:#ede9fe,stroke:#7c3aed,stroke-width:2px
+    style BACKEND fill:#e0e7ff,stroke:#4f46e5,stroke-width:2px
+    style DATA fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style EXTERNAL fill:#d1fae5,stroke:#059669,stroke-width:2px
+                </pre>
+            </div>
+            <div class="diagram-card-footer">
+                <i class="fa-solid fa-circle-info"></i> Architecture : React Native, Node.js, PostgreSQL, Redis. Paiements via Stripe/CIB. Notifications push avec Firebase.
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Mermaid init
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Poppins, Cairo, sans-serif',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 16,
+                nodeSpacing: 30,
+                rankSpacing: 40,
+            },
+            sequence: {
+                useMaxWidth: true,
+                actorMargin: 40,
+                messageMargin: 20,
+                boxMargin: 8,
+                mirrorActors: false,
+                wrap: true,
+                width: 140,
+            },
+            classDiagram: {
+                useMaxWidth: true,
+                padding: 12,
+            },
+            er: {
+                useMaxWidth: true,
+                padding: 12,
+            },
+        });
+
+        // Toggle card collapse
+        function toggleCard(header) {
+            header.closest('.diagram-card').classList.toggle('collapsed');
+        }
+
+        // Copy diagram code
+        function copyCode(mermaidId) {
+            const pre = document.getElementById(mermaidId);
+            if (!pre) return;
+            const code = pre.textContent.trim();
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Code Mermaid copie !');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy'); showToast('Copie reussie'); } catch (e) { showToast('Erreur de copie'); }
+                document.body.removeChild(textarea);
+            });
+        }
+
+        // Toast
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Mobile menu
+        const overlay = document.getElementById('menuOverlay');
+        const panel = document.getElementById('menuPanel');
+        const openBtn = document.getElementById('menuOpenBtn');
+        const closeBtn = document.getElementById('menuCloseBtn');
+        const navLinks = document.querySelectorAll('.menu-links a');
+
+        function openMenu() {
+            overlay.classList.add('active');
+            panel.classList.add('active');
+        }
+        function closeMenu() {
+            overlay.classList.remove('active');
+            panel.classList.remove('active');
+        }
+        openBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                closeMenu();
+                const targetId = link.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                e.preventDefault();
+            });
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.mermaid svg').forEach(svg => {
+                svg.style.maxWidth = '100%';
+                svg.style.height = 'auto';
+            });
+        });
+    </script>
+</body>
+</html>
