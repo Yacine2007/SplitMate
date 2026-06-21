@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>SplitMate – Diagrammes UML</title>
-    <!-- PWA Meta -->
+    <!-- PWA Essentials -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c3ce0">
@@ -63,6 +63,23 @@
             font-size: 1.2rem; color: var(--primary); text-decoration: none;
         }
         .navbar-brand i { font-size: 1.4rem; color: var(--accent); }
+
+        /* Install button in navbar */
+        .install-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-left: auto;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 6px;
+        }
+        .install-btn.show { display: flex; }
 
         /* Sidebar */
         .sidebar {
@@ -218,6 +235,7 @@
             background: rgba(0,0,0,0.5); color: #fff; font-size: 1rem; cursor: pointer;
         }
 
+        /* Toast & info messages */
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
             background: #1a1035; color: #fff; padding: 10px 22px; border-radius: 24px;
@@ -225,6 +243,12 @@
             opacity: 0; transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .info-banner {
+            background: #fef3c7; color: #92400e; padding: 10px 16px; border-radius: 8px;
+            margin-bottom: 16px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
+        }
+        .info-banner i { font-size: 1rem; }
+        .hidden { display: none; }
 
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
@@ -241,6 +265,7 @@
     <nav class="navbar">
         <button class="menu-btn" id="navbarMenuBtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
         <a href="#" class="navbar-brand" id="homeLink"><i class="fa-solid fa-hand-holding-heart"></i> SplitMate</a>
+        <button class="install-btn" id="installBtn"><i class="fa-solid fa-download"></i> تثبيت</button>
     </nav>
 
     <!-- Sidebar -->
@@ -266,58 +291,64 @@
     <!-- Main Area -->
     <div class="main-area" id="mainArea">
         <div class="content-wrapper" id="contentWrapper">
-            <!-- Accueil (visible par défaut) -->
+            <!-- Hint only visible on file:// protocol -->
+            <div class="info-banner hidden" id="fileHint">
+                <i class="fa-solid fa-circle-info"></i>
+                لتثبيت التطبيق كتطبيق مستقل، افتح الصفحة عبر <strong>localhost</strong> أو <strong>HTTPS</strong> ثم اضغط "تثبيت".
+            </div>
+
+            <!-- Accueil -->
             <section class="home-section active" id="home">
                 <div class="home-header">
                     <div class="app-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
                     <div class="home-title">
                         <h1>SplitMate</h1>
-                        <p>Application de partage equitable des frais entre amis, couples et groupes. Simplifiez les comptes communs avec un portefeuille partage et des propositions d'activites.</p>
+                        <p>تطبيق لتقسيم المصاريف بين الأصدقاء والمجموعات. محفظة مشتركة، دعوات آمنة عبر رمز تحقق، واقتراحات لأماكن الخروج.</p>
                     </div>
                 </div>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon icon-use-case"><i class="fa-solid fa-user-plus"></i></div>
-                        <h3>Invitation securisee</h3>
-                        <p>Ajoutez vos amis via un code de verification 2FA. Creez des espaces prives et partages.</p>
+                        <h3>دعوة آمنة</h3>
+                        <p>أضف أصدقاءك عبر رمز تحقق 2FA. أنشئ مساحات مشتركة خاصة.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#fce7f3;color:#db2777;"><i class="fa-solid fa-calculator"></i></div>
-                        <h3>Division automatique</h3>
-                        <p>Chaque depense est divisee equitablement entre les membres du groupe.</p>
+                        <h3>تقسيم تلقائي</h3>
+                        <p>كل مصروف يُقسم بالتساوي بين الأعضاء.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#dbeafe;color:#2563eb;"><i class="fa-solid fa-credit-card"></i></div>
-                        <h3>Paiement en ligne</h3>
-                        <p>Reglez votre part directement via Stripe ou CIB. Statut en temps reel.</p>
+                        <h3>دفع إلكتروني</h3>
+                        <p>ادفع حصتك عبر Stripe أو CIB. تتبّع حالة الدفع.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-wallet"></i></div>
-                        <h3>Portefeuille commun</h3>
-                        <p>Suivez le solde partage du groupe. Chaque mouvement est enregistre.</p>
+                        <h3>محفظة جماعية</h3>
+                        <p>رصيد مشترك للمجموعة مع سجل للحركات.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#d1fae5;color:#059669;"><i class="fa-solid fa-utensils"></i></div>
-                        <h3>Decouvrez des lieux</h3>
-                        <p>Parcourez restaurants, cinemas et associez une depense a une sortie.</p>
+                        <h3>اكتشف أماكن</h3>
+                        <p>مطاعم، سينما، وأنشطة. اربط المصروف بفعالية.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#e0e7ff;color:#4f46e5;"><i class="fa-solid fa-bell"></i></div>
-                        <h3>Notifications</h3>
-                        <p>Recevez des alertes quand une depense est ajoutee ou un paiement effectue.</p>
+                        <h3>إشعارات</h3>
+                        <p>تنبيهات عند إضافة مصروف أو إتمام دفع.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Diagramme Cas d'utilisation -->
+            <!-- Diagrammes -->
             <div class="diagram-section" id="use-case">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-use-case"><i class="fa-solid fa-person-circle-check"></i></div>
-                        <div class="header-info"><h3>Diagramme de Cas d'Utilisation</h3></div>
+                        <div class="header-info"><h3>مخطط حالات الاستخدام</h3></div>
                         <div class="header-actions">
-                            <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-use-case')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('use-case')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="نسخ" onclick="event.stopPropagation(); copyCode('mermaid-use-case')"><i class="fa-solid fa-copy"></i></button>
+                            <button class="btn-icon" title="ملء الشاشة" onclick="event.stopPropagation(); openFullscreen('use-case')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
@@ -326,21 +357,21 @@
                             <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-use-case">
 flowchart TB
-    subgraph SYSTEM["Application SplitMate"]
-        UC1["Se connecter / inscrire"]
-        UC2["Authentification 2FA"]
-        UC3["Ajouter des amis (invitation)"]
-        UC4["Creer un espace partage"]
-        UC5["Ajouter une depense"]
-        UC6["Division automatique des frais"]
-        UC7["Payer en ligne (Stripe / CIB)"]
-        UC8["Consulter le portefeuille commun"]
-        UC9["Parcourir restaurants / cinemas"]
-        UC10["Proposer une activite"]
+    subgraph SYSTEM["تطبيق SplitMate"]
+        UC1["تسجيل الدخول / الاشتراك"]
+        UC2["تحقق ثنائي 2FA"]
+        UC3["إضافة أصدقاء (دعوة)"]
+        UC4["إنشاء مساحة مشتركة"]
+        UC5["إضافة مصروف"]
+        UC6["تقسيم تلقائي للمبلغ"]
+        UC7["دفع إلكتروني (Stripe / CIB)"]
+        UC8["الاطلاع على المحفظة المشتركة"]
+        UC9["تصفح مطاعم / سينما"]
+        UC10["اقتراح نشاط"]
     end
-    USER["Utilisateur (Amis, couples)"]
-    ADMIN["Administrateur"]
-    PAYMENT["Passerelle de paiement (Stripe, CIB)"]
+    USER["مستخدم (أصدقاء، أزواج)"]
+    ADMIN["مدير"]
+    PAYMENT["بوابة الدفع (Stripe, CIB)"]
     USER --> UC1
     USER --> UC2
     USER --> UC3
@@ -356,19 +387,18 @@ flowchart TB
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Acteurs : Utilisateur, Admin, Passerelle de paiement.</div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> الفاعلون: مستخدم، مدير، بوابة دفع.</div>
                 </div>
             </div>
 
-            <!-- Diagramme de Classes -->
             <div class="diagram-section" id="class">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-class"><i class="fa-solid fa-cubes"></i></div>
-                        <div class="header-info"><h3>Diagramme de Classes</h3></div>
+                        <div class="header-info"><h3>مخطط الفئات</h3></div>
                         <div class="header-actions">
-                            <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-class')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('class')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="نسخ" onclick="event.stopPropagation(); copyCode('mermaid-class')"><i class="fa-solid fa-copy"></i></button>
+                            <button class="btn-icon" title="ملء الشاشة" onclick="event.stopPropagation(); openFullscreen('class')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
@@ -422,19 +452,18 @@ classDiagram
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Invitation avec code 2FA. Portefeuille 1:1 Groupe.</div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> دعوة برمز 2FA. المحفظة مرتبطة 1:1 بالمجموعة.</div>
                 </div>
             </div>
 
-            <!-- Sequence -->
             <div class="diagram-section" id="sequence">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-sequence"><i class="fa-solid fa-arrows-spin"></i></div>
-                        <div class="header-info"><h3>Diagramme de Sequence – Paiement partage</h3></div>
+                        <div class="header-info"><h3>مخطط التتابع – دفع مشترك</h3></div>
                         <div class="header-actions">
-                            <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-sequence')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('sequence')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="نسخ" onclick="event.stopPropagation(); copyCode('mermaid-sequence')"><i class="fa-solid fa-copy"></i></button>
+                            <button class="btn-icon" title="ملء الشاشة" onclick="event.stopPropagation(); openFullscreen('sequence')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
@@ -443,43 +472,42 @@ classDiagram
                             <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-sequence">
 sequenceDiagram
-    actor A as Ahmed
-    actor B as Bilal
-    actor C as Chaima
+    actor A as أحمد
+    actor B as بلال
+    actor C as شيماء
     participant App as SplitMate
-    participant Server as Serveur
+    participant Server as الخادم
     participant Pay as Stripe/CIB
-    A->>App: Ajoute depense 9000 DA
+    A->>App: إضافة مصروف 9000 دج
     App->>Server: POST /expenses
-    Server->>Server: Division 9000/3
-    Server-->>App: Parts calculees
-    App->>B: Notification 3000 DA
-    App->>C: Notification 3000 DA
-    B->>App: Payer maintenant
-    App->>Pay: Paiement 3000 DA
-    Pay-->>Server: Confirmation
-    Server-->>App: Paiement Bilal OK
-    C->>App: Payer maintenant
-    App->>Pay: Paiement 3000 DA
-    Pay-->>Server: Confirmation
-    Server-->>App: Paiement Chaima OK
-    Server->>App: Depense reglee !
+    Server->>Server: قسمة 9000/3
+    Server-->>App: حصص محسوبة
+    App->>B: إشعار 3000 دج
+    App->>C: إشعار 3000 دج
+    B->>App: دفع الآن
+    App->>Pay: دفع 3000 دج
+    Pay-->>Server: تأكيد
+    Server-->>App: تم دفع بلال
+    C->>App: دفع الآن
+    App->>Pay: دفع 3000 دج
+    Pay-->>Server: تأكيد
+    Server-->>App: تم دفع شيماء
+    Server->>App: تمت تسوية المصروف
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Scenario complet.</div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> سيناريو كامل.</div>
                 </div>
             </div>
 
-            <!-- Activite -->
             <div class="diagram-section" id="activity">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-activity"><i class="fa-solid fa-diagram-project"></i></div>
-                        <div class="header-info"><h3>Diagramme d'Activite</h3></div>
+                        <div class="header-info"><h3>مخطط النشاط</h3></div>
                         <div class="header-actions">
-                            <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-activity')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('activity')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="نسخ" onclick="event.stopPropagation(); copyCode('mermaid-activity')"><i class="fa-solid fa-copy"></i></button>
+                            <button class="btn-icon" title="ملء الشاشة" onclick="event.stopPropagation(); openFullscreen('activity')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
@@ -488,49 +516,48 @@ sequenceDiagram
                             <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-activity">
 flowchart TD
-    Start([Debut]) --> Login[Connexion / Inscription]
-    Login --> Has2FA{2FA activee ?}
-    Has2FA -->|Oui| TwoFA[Saisir code]
-    Has2FA -->|Non| Dashboard[Tableau de bord]
-    TwoFA --> CodeValid{Valide ?} -->|Oui| Dashboard
-    CodeValid -->|Non| TwoFA
-    Dashboard --> Choice{Action ?}
-    Choice -->|Ajouter amis| Invite[Envoyer invitation + code 2FA]
-    Invite --> FriendAccept{Accepte ?} -->|Oui| SharedSpace[Espace partage]
-    FriendAccept -->|Non| Invite
+    Start([بداية]) --> Login[تسجيل الدخول]
+    Login --> Has2FA{تفعيل 2FA؟}
+    Has2FA -->|نعم| TwoFA[إدخال الرمز]
+    Has2FA -->|لا| Dashboard[لوحة التحكم]
+    TwoFA --> CodeValid{صحيح؟} -->|نعم| Dashboard
+    CodeValid -->|لا| TwoFA
+    Dashboard --> Choice{إجراء؟}
+    Choice -->|إضافة أصدقاء| Invite[إرسال دعوة + رمز 2FA]
+    Invite --> FriendAccept{قبل؟} -->|نعم| SharedSpace[مساحة مشتركة]
+    FriendAccept -->|لا| Invite
     SharedSpace --> Dashboard
-    Choice -->|Nouvelle depense| SelectGroup[Selectionner groupe]
-    SelectGroup --> EnterAmount[Saisir montant]
-    EnterAmount --> AutoSplit[Division automatique]
-    AutoSplit --> NotifyMembers[Notifier membres]
-    NotifyMembers --> ViewShares[Voir parts]
-    ViewShares --> PayNow{Payer ?}
-    PayNow -->|Oui| OnlinePay[Paiement Stripe/CIB]
-    OnlinePay --> ConfirmPay{Confirme ?} -->|Oui| UpdateWallet[Mise a jour portefeuille]
-    ConfirmPay -->|Non| Retry[Reessayer] --> OnlinePay
-    PayNow -->|Plus tard| Pending[En attente]
-    UpdateWallet --> AllPaid{Tous paye ?} -->|Oui| Close[Depense cloturee]
-    AllPaid -->|Non| ViewShares
+    Choice -->|مصروف جديد| SelectGroup[اختيار المجموعة]
+    SelectGroup --> EnterAmount[إدخال المبلغ]
+    EnterAmount --> AutoSplit[تقسيم تلقائي]
+    AutoSplit --> NotifyMembers[إشعار الأعضاء]
+    NotifyMembers --> ViewShares[مشاهدة الحصص]
+    ViewShares --> PayNow{الدفع الآن؟}
+    PayNow -->|نعم| OnlinePay[دفع Stripe/CIB]
+    OnlinePay --> ConfirmPay{تم التأكيد؟} -->|نعم| UpdateWallet[تحديث المحفظة]
+    ConfirmPay -->|لا| Retry[إعادة المحاولة] --> OnlinePay
+    PayNow -->|لاحقاً| Pending[قيد الانتظار]
+    UpdateWallet --> AllPaid{الكل دفع؟} -->|نعم| Close[إغلاق المصروف]
+    AllPaid -->|لا| ViewShares
     Pending --> Close
-    Close --> End([Termine])
-    Choice -->|Explorer| Browse[Parcourir activites]
-    Browse --> Filter[Filtrer] --> SelectPlace[Choisir lieu] --> SelectGroup
+    Close --> End([نهاية])
+    Choice -->|استكشاف| Browse[تصفح الأنشطة]
+    Browse --> Filter[تصفية] --> SelectPlace[اختيار مكان] --> SelectGroup
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Flux complet.</div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> المسار الكامل.</div>
                 </div>
             </div>
 
-            <!-- ER -->
             <div class="diagram-section" id="er">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-er"><i class="fa-solid fa-database"></i></div>
-                        <div class="header-info"><h3>Modele Entite-Relation (ER)</h3></div>
+                        <div class="header-info"><h3>نموذج الكيان-العلاقة</h3></div>
                         <div class="header-actions">
-                            <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-er')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('er')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="نسخ" onclick="event.stopPropagation(); copyCode('mermaid-er')"><i class="fa-solid fa-copy"></i></button>
+                            <button class="btn-icon" title="ملء الشاشة" onclick="event.stopPropagation(); openFullscreen('er')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
@@ -590,19 +617,18 @@ erDiagram
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Tables de jointure.</div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> جداول الوصل: MEMBRE_GROUPE, PART_DEPENSE.</div>
                 </div>
             </div>
 
-            <!-- Composants -->
             <div class="diagram-section" id="component">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-component"><i class="fa-solid fa-server"></i></div>
-                        <div class="header-info"><h3>Diagramme de Composants</h3></div>
+                        <div class="header-info"><h3>مخطط المكونات</h3></div>
                         <div class="header-actions">
-                            <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-component')"><i class="fa-solid fa-copy"></i></button>
-                            <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('component')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn-icon" title="نسخ" onclick="event.stopPropagation(); copyCode('mermaid-component')"><i class="fa-solid fa-copy"></i></button>
+                            <button class="btn-icon" title="ملء الشاشة" onclick="event.stopPropagation(); openFullscreen('component')"><i class="fa-solid fa-expand"></i></button>
                             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
                         </div>
                     </div>
@@ -611,20 +637,20 @@ erDiagram
                             <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-component">
 flowchart TB
-    subgraph MOBILE["Application Mobile (React Native)"]
-        UI["Interface Utilisateur"]
-        AuthModule["Module Auth (2FA)"]
-        FriendsModule["Module Amis"]
-        ExpenseModule["Module Depenses"]
-        PaymentModule["Paiement"]
+    subgraph MOBILE["تطبيق الجوال (React Native)"]
+        UI["واجهة المستخدم"]
+        AuthModule["وحدة المصادقة (2FA)"]
+        FriendsModule["وحدة الأصدقاء"]
+        ExpenseModule["وحدة المصاريف"]
+        PaymentModule["الدفع"]
     end
-    subgraph BACKEND["Backend Node.js"]
-        APIGateway["API Gateway"]
-        AuthService["Auth Service"]
-        ExpenseService["Service Depense"]
-        PaymentService["Service Paiement (Stripe)"]
+    subgraph BACKEND["الخادم (Node.js)"]
+        APIGateway["بوابة API"]
+        AuthService["خدمة المصادقة"]
+        ExpenseService["خدمة المصاريف"]
+        PaymentService["خدمة الدفع (Stripe)"]
     end
-    subgraph DATA["Donnees"]
+    subgraph DATA["البيانات"]
         MainDB["PostgreSQL"]
     end
     UI --> AuthModule
@@ -635,7 +661,7 @@ flowchart TB
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Architecture simplifiee.</div>
+                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> معمارية مبسطة.</div>
                 </div>
             </div>
         </div>
@@ -659,7 +685,7 @@ flowchart TB
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============ Mermaid manual rendering with spinner hide ============
+        // ============ Mermaid rendering with spinner ============
         mermaid.initialize({
             startOnLoad: false,
             theme: 'default',
@@ -677,9 +703,8 @@ flowchart TB
                 try {
                     await mermaid.run({ nodes: [el] });
                 } catch (e) {
-                    console.error('Mermaid render error', e);
+                    console.error('Mermaid error', e);
                 }
-                // Hide spinner in this zoom container
                 const container = el.closest('.zoom-container');
                 if (container) {
                     const spinner = container.querySelector('.spinner-container');
@@ -687,7 +712,6 @@ flowchart TB
                 }
             }
         }
-
         window.addEventListener('load', renderDiagrams);
 
         // ============ SPA Navigation ============
@@ -718,7 +742,6 @@ flowchart TB
                 showSection(link.getAttribute('data-target'));
             });
         });
-
         document.getElementById('homeLink').addEventListener('click', (e) => {
             e.preventDefault();
             showSection('home');
@@ -738,9 +761,8 @@ flowchart TB
         function copyCode(mermaidId) {
             const pre = document.getElementById(mermaidId);
             if (!pre) return;
-            navigator.clipboard.writeText(pre.textContent.trim()).then(() => showToast('Code Mermaid copie !'));
+            navigator.clipboard.writeText(pre.textContent.trim()).then(() => showToast('تم نسخ كود Mermaid'));
         }
-
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
@@ -749,7 +771,7 @@ flowchart TB
             toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // Zoom & Pan
+        // ============ Zoom & Pan (vector scaling) ============
         function setupZoomPan(container) {
             let scale = 1, panX = 0, panY = 0;
             let isDragging = false, startX, startY, lastPanX, lastPanY;
@@ -829,10 +851,9 @@ flowchart TB
         }
         document.querySelectorAll('.zoom-container').forEach(c => setupZoomPan(c));
 
-        // Fullscreen
+        // ============ Fullscreen ============
         const modal = document.getElementById('fullscreenModal');
         const modalZoomContainer = document.getElementById('modalZoomContainer');
-        const modalSpinner = modalZoomContainer.querySelector('.spinner-container');
         function openFullscreen(diagramKey) {
             const sourceContainer = document.getElementById('zoom-' + diagramKey);
             if (!sourceContainer) return;
@@ -840,7 +861,6 @@ flowchart TB
             if (svg) {
                 modalZoomContainer.innerHTML = '';
                 modalZoomContainer.appendChild(svg.cloneNode(true));
-                // re-add spinner (hidden)
                 const spinner = document.createElement('div');
                 spinner.className = 'spinner-container hidden';
                 spinner.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
@@ -869,7 +889,25 @@ flowchart TB
             if (svg) svg.style.transform = 'scale(1)';
         });
 
-        // PWA Icon & Manifest
+        // ============ PWA Install Prompt ============
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.add('show');
+        });
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                installBtn.classList.remove('show');
+            }
+            deferredPrompt = null;
+        });
+
+        // ============ PWA Icon & Manifest ============
         function generateIcon() {
             const canvas = document.createElement('canvas');
             canvas.width = 192; canvas.height = 192;
@@ -896,11 +934,17 @@ flowchart TB
             theme_color: '#6c3ce0',
             icons: [{ src: iconDataUrl, sizes: '192x192', type: 'image/png' }]
         };
-        const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-        document.getElementById('manifestLink').href = URL.createObjectURL(blob);
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+        document.getElementById('manifestLink').href = URL.createObjectURL(manifestBlob);
+
         if ('serviceWorker' in navigator) {
             const swCode = `self.addEventListener('install',e=>{e.waitUntil(caches.open('splitmate-v1').then(c=>c.addAll(['./'])))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});`;
             navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})));
+        }
+
+        // Show hint if file:// (not localhost / https)
+        if (window.location.protocol === 'file:') {
+            document.getElementById('fileHint').classList.remove('hidden');
         }
     </script>
 </body>
