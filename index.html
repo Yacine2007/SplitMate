@@ -7,8 +7,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c3ce0">
-    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
@@ -453,45 +451,14 @@ flowchart TD
                             <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-er">
 erDiagram
-    UTILISATEUR {
-        string id PK
-        string nom
-        string email UK
-        boolean deuxFacteursActive
-    }
-    GROUPE {
-        string id PK
-        string nom
-    }
-    MEMBRE_GROUPE {
-        string userId PK_FK
-        string groupeId PK_FK
-        double balanceIndividuelle
-    }
-    DEPENSE {
-        string id PK
-        double montant
-    }
-    PART_DEPENSE {
-        string depenseId PK_FK
-        string userId PK_FK
-        double montantDu
-        boolean estPayee
-    }
-    PORTEFEUILLE {
-        string id PK
-        double balance
-    }
-    PAIEMENT {
-        string id PK
-        double montant
-        string statut
-        string referenceExterne
-    }
-    INVITATION {
-        string id PK
-        string code2FA
-    }
+    UTILISATEUR { string id PK; string nom; string email UK; boolean deuxFacteursActive }
+    GROUPE { string id PK; string nom }
+    MEMBRE_GROUPE { string userId PK_FK; string groupeId PK_FK; double balanceIndividuelle }
+    DEPENSE { string id PK; double montant }
+    PART_DEPENSE { string depenseId PK_FK; string userId PK_FK; double montantDu; boolean estPayee }
+    PORTEFEUILLE { string id PK; double balance }
+    PAIEMENT { string id PK; double montant; string statut; string referenceExterne }
+    INVITATION { string id PK; string code2FA }
     UTILISATEUR ||--o{ MEMBRE_GROUPE : appartient
     GROUPE ||--o{ MEMBRE_GROUPE : contient
     GROUPE ||--o{ DEPENSE : possede
@@ -525,26 +492,19 @@ erDiagram
                             <pre class="mermaid" id="mermaid-component">
 flowchart TB
     subgraph MOBILE["Application Mobile (React Native)"]
-        UI["Interface Utilisateur"]
-        AuthModule["Module Auth (2FA)"]
-        FriendsModule["Module Amis"]
-        ExpenseModule["Module Depenses"]
+        UI["Interface Utilisateur"]; AuthModule["Module Auth (2FA)"]
+        FriendsModule["Module Amis"]; ExpenseModule["Module Depenses"]
         PaymentModule["Paiement"]
     end
     subgraph BACKEND["Backend Node.js"]
-        APIGateway["API Gateway"]
-        AuthService["Auth Service"]
-        ExpenseService["Service Depense"]
-        PaymentService["Service Paiement (Stripe)"]
+        APIGateway["API Gateway"]; AuthService["Auth Service"]
+        ExpenseService["Service Depense"]; PaymentService["Service Paiement (Stripe)"]
     end
     subgraph DATA["Donnees"]
         MainDB["PostgreSQL"]
     end
-    UI --> AuthModule
-    AuthModule --> APIGateway
-    APIGateway --> AuthService
-    AuthService --> MainDB
-    PaymentService --> StripeAPI["Stripe/CIB"]
+    UI --> AuthModule; AuthModule --> APIGateway; APIGateway --> AuthService
+    AuthService --> MainDB; PaymentService --> StripeAPI["Stripe/CIB"]
                             </pre>
                         </div>
                     </div>
@@ -644,10 +604,30 @@ flowchart TB
 
         let deferredPrompt;
         const installBtn = document.getElementById('installBtn');
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.classList.add('show'); });
-        installBtn.addEventListener('click', async () => { if (!deferredPrompt) return; deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') installBtn.classList.remove('show'); deferredPrompt = null; });
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.add('show');
+            console.log('beforeinstallprompt event fired');
+        });
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log('Install outcome:', outcome);
+            if (outcome === 'accepted') installBtn.classList.remove('show');
+            deferredPrompt = null;
+        });
+        window.addEventListener('appinstalled', () => {
+            console.log('Application installee');
+            installBtn.classList.remove('show');
+        });
 
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker enregistre', reg))
+                .catch(err => console.log('Service Worker erreur', err));
+        }
     </script>
 </body>
 </html>
