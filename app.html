@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>SplitMate – Diagrammes UML</title>
-    <!-- PWA Essentials -->
+    <!-- PWA Essentials intégrés directement -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c3ce0">
+    <!-- Icône générée en base64 -->
     <link rel="apple-touch-icon" sizes="192x192" href="data:image/png;base64,iVBORw0KGgo=" id="appleIcon">
     <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgo=" id="favicon">
+    <!-- Manifest inline via data URI -->
     <link rel="manifest" href="data:application/json;base64," id="manifestLink">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Mermaid JS -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -34,7 +35,6 @@
             --navbar-height: 56px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Poppins', 'Cairo', sans-serif;
             background: var(--bg);
@@ -44,7 +44,6 @@
             overflow-x: hidden;
             padding-top: var(--navbar-height);
         }
-
         /* Fixed navbar */
         .navbar {
             position: fixed;
@@ -63,24 +62,12 @@
             font-size: 1.2rem; color: var(--primary); text-decoration: none;
         }
         .navbar-brand i { font-size: 1.4rem; color: var(--accent); }
-
-        /* Install button in navbar */
         .install-btn {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 6px 16px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-left: auto;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            gap: 6px;
+            background: var(--primary); color: #fff; border: none; border-radius: 8px;
+            padding: 6px 16px; font-weight: 600; font-size: 0.85rem; margin-left: auto;
+            cursor: pointer; display: none; align-items: center; gap: 6px;
         }
         .install-btn.show { display: flex; }
-
         /* Sidebar */
         .sidebar {
             position: fixed; top: var(--navbar-height); left: 0;
@@ -118,7 +105,6 @@
         .sidebar-nav a i { width: 20px; text-align: center; font-size: 1rem; }
         .sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; }
         .sidebar-nav a.active { background: rgba(139,92,246,0.3); color: #fff; font-weight: 600; }
-
         /* Main area */
         .main-area {
             display: flex; margin-left: var(--sidebar-width);
@@ -127,11 +113,9 @@
         .content-wrapper {
             flex: 1; padding: 28px 32px 60px; max-width: 1100px; width: 100%; margin: 0 auto;
         }
-
         /* Sections */
         .home-section, .diagram-section { display: none; }
         .home-section.active, .diagram-section.active { display: block; }
-
         /* Home Hero */
         .home-hero {
             background: linear-gradient(135deg, #1a1035 0%, #6c3ce0 100%);
@@ -153,17 +137,8 @@
             align-items: center;
             justify-content: center;
         }
-        .home-hero .hero-text h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .home-hero .hero-text p {
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.85);
-            max-width: 500px;
-        }
-
+        .home-hero .hero-text h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 6px; }
+        .home-hero .hero-text p { font-size: 0.95rem; color: rgba(255,255,255,0.85); max-width: 500px; }
         /* Feature cards with images */
         .feature-grid {
             display: grid;
@@ -188,35 +163,17 @@
             background-position: center;
             position: relative;
         }
-        .feature-card-body {
-            padding: 16px;
-            flex: 1;
-        }
-        .feature-card-body h3 {
-            font-size: 1rem;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .feature-card-body p {
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
+        .feature-card-body { padding: 16px; flex: 1; }
+        .feature-card-body h3 { font-size: 1rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .feature-card-body p { font-size: 0.85rem; color: var(--text-light); }
         .feature-icon {
-            width: 36px; height: 36px;
-            border-radius: 10px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+            width: 36px; height: 36px; border-radius: 10px;
+            display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem;
         }
-
-        /* Diagram cards (unchanged) */
+        /* Diagram cards */
         .diagram-card {
             background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
-            overflow: hidden; border: 1px solid var(--border);
-            margin-bottom: 20px;
+            overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px;
         }
         .diagram-card-header {
             display: flex; align-items: center; gap: 10px; padding: 14px 16px;
@@ -253,7 +210,6 @@
             display: flex; align-items: center; gap: 6px;
         }
         .diagram-card.collapsed .diagram-card-footer { display: none; }
-
         /* Zoom & Pan */
         .zoom-container {
             width: 100%; height: 100%; cursor: grab; transform-origin: 0 0;
@@ -262,13 +218,11 @@
         .zoom-container svg { width: 100%; height: auto; display: block; }
         .zoom-container:active { cursor: grabbing; }
         .zoom-container.dragging { cursor: grabbing; }
-
         .spinner-container {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 5; color: var(--primary); font-size: 2rem;
         }
         .spinner-container.hidden { display: none; }
-
         /* Fullscreen */
         .fullscreen-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -289,7 +243,6 @@
             width: 36px; height: 36px; border-radius: 50%; border: none;
             background: rgba(0,0,0,0.5); color: #fff; font-size: 1rem; cursor: pointer;
         }
-
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
             background: #1a1035; color: #fff; padding: 10px 22px; border-radius: 24px;
@@ -297,7 +250,6 @@
             opacity: 0; transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
@@ -340,7 +292,6 @@
     <!-- Main Area -->
     <div class="main-area" id="mainArea">
         <div class="content-wrapper" id="contentWrapper">
-
             <!-- Accueil avec Hero et cartes illustrées -->
             <section class="home-section active" id="home">
                 <div class="home-hero">
@@ -919,7 +870,7 @@ flowchart TB
             if (svg) svg.style.transform = 'scale(1)';
         });
 
-        // ============ PWA Install Prompt ============
+        // ============ PWA – Installation prompt ============
         let deferredPrompt;
         const installBtn = document.getElementById('installBtn');
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -931,32 +882,34 @@ flowchart TB
             if (!deferredPrompt) return;
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') installBtn.classList.remove('show');
-            deferredPrompt = null;
-        });
-        window.addEventListener('appinstalled', () => {
-            installBtn.classList.remove('show');
+            if (outcome === 'accepted') {
+                installBtn.classList.remove('show');
+                console.log('Application installée');
+            }
             deferredPrompt = null;
         });
 
-        // ============ PWA Icon & Manifest ============
-        function generateIcon() {
+        // ============ Génération icône + manifest inline ============
+        function generateIconBase64() {
             const canvas = document.createElement('canvas');
             canvas.width = 192; canvas.height = 192;
             const ctx = canvas.getContext('2d');
             const grad = ctx.createLinearGradient(0,0,192,192);
-            grad.addColorStop(0, '#8b5cf6'); grad.addColorStop(1, '#f59e0b');
+            grad.addColorStop(0, '#8b5cf6');
+            grad.addColorStop(1, '#f59e0b');
             ctx.fillStyle = grad;
             ctx.beginPath(); ctx.arc(96,96,80,0,Math.PI*2); ctx.fill();
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 80px "Font Awesome 5 Free","Poppins",sans-serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
             ctx.fillText('\uf4be', 96, 96);
             return canvas.toDataURL('image/png');
         }
-        const iconDataUrl = generateIcon();
-        document.getElementById('favicon').href = iconDataUrl;
-        document.getElementById('appleIcon').href = iconDataUrl;
+        const iconBase64 = generateIconBase64();
+        document.getElementById('favicon').href = iconBase64;
+        document.getElementById('appleIcon').href = iconBase64;
+
         const manifest = {
             name: 'SplitMate UML',
             short_name: 'SplitMate',
@@ -964,14 +917,16 @@ flowchart TB
             display: 'standalone',
             background_color: '#6c3ce0',
             theme_color: '#6c3ce0',
-            icons: [{ src: iconDataUrl, sizes: '192x192', type: 'image/png' }]
+            icons: [{ src: iconBase64, sizes: '192x192', type: 'image/png' }]
         };
-        const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-        document.getElementById('manifestLink').href = URL.createObjectURL(manifestBlob);
+        const manifestBase64 = btoa(JSON.stringify(manifest));
+        document.getElementById('manifestLink').href = 'data:application/json;base64,' + manifestBase64;
 
+        // ============ Service Worker (blob) ============
         if ('serviceWorker' in navigator) {
             const swCode = `self.addEventListener('install',e=>{e.waitUntil(caches.open('splitmate-v1').then(c=>c.addAll(['./'])))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});`;
-            navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})));
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(swBlob));
         }
     </script>
 </body>
