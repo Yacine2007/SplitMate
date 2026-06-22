@@ -9,13 +9,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c3ce0">
+    <!-- سيتم تعبئة الروابط ديناميكياً -->
     <link rel="apple-touch-icon" sizes="180x180" href="" id="appleIcon180">
     <link rel="apple-touch-icon" sizes="192x192" href="" id="appleIcon192">
     <link rel="icon" type="image/png" sizes="192x192" href="" id="favicon192">
     <link rel="icon" type="image/png" sizes="512x512" href="" id="favicon512">
     <link rel="manifest" href="" id="manifestLink">
 
-    <!-- Font Awesome (CDN, cached by service worker) -->
+    <!-- Font Awesome (CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Mermaid JS -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
@@ -406,6 +407,7 @@ classDiagram
         +créerGroupe()
         +payer()
     }
+
     class Groupe {
         +String id
         +String nom
@@ -413,6 +415,7 @@ classDiagram
         +ajouterMembre()
         +calculerSoldes()
     }
+
     class Dépense {
         +String id
         +Float montant
@@ -420,12 +423,14 @@ classDiagram
         +Date date
         +diviser()
     }
+
     class Paiement {
         +String id
         +Float montant
         +String statut
         +traiter()
     }
+
     Utilisateur "1" --> "*" Groupe : appartient
     Groupe "1" --> "*" Dépense : contient
     Utilisateur "1" --> "*" Paiement : effectue
@@ -624,29 +629,29 @@ graph TD
 
     <script>
         // ============ PWA Icons & Manifest ============
-        function generateIcon(size) {
-            const canvas = document.createElement('canvas');
-            canvas.width = size; canvas.height = size;
-            const ctx = canvas.getContext('2d');
-            const grad = ctx.createLinearGradient(0,0,size,size);
-            grad.addColorStop(0, '#8b5cf6'); grad.addColorStop(1, '#f59e0b');
-            ctx.fillStyle = grad;
-            ctx.beginPath(); ctx.arc(size/2, size/2, size*0.42, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#fff';
-            ctx.font = `bold ${size*0.42}px "Font Awesome 5 Free", "Poppins", sans-serif`;
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('\uf4be', size/2, size/2);
-            return canvas.toDataURL('image/png');
+        // توليد أيقونات SVG بسيطة (قلب) مستقلة عن الخطوط
+        function generateSvgIcon(size) {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+                <defs>
+                    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8b5cf6"/>
+                        <stop offset="100%" style="stop-color:#f59e0b"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="${size/2}" cy="${size/2}" r="${size*0.42}" fill="url(#g)"/>
+                <text x="${size/2}" y="${size/2}" text-anchor="middle" dy=".35em" font-size="${size*0.45}" fill="white" font-family="Arial, sans-serif" font-weight="bold">♥</text>
+            </svg>`;
+            return 'data:image/svg+xml,' + encodeURIComponent(svg);
         }
-        const i192 = generateIcon(192);
-        const i512 = generateIcon(512);
-        const i180 = generateIcon(180);
+        const i192 = generateSvgIcon(192);
+        const i512 = generateSvgIcon(512);
+        const i180 = generateSvgIcon(180);
         document.getElementById('appleIcon180').href = i180;
         document.getElementById('appleIcon192').href = i192;
         document.getElementById('favicon192').href = i192;
         document.getElementById('favicon512').href = i512;
 
-        // إنشاء المانفست مباشرةً كـ data URI لتفادي مشاكل Blob URL
+        // إنشاء المانفست مباشرةً كـ data URI
         const manifest = {
             name: 'SplitMate UML',
             short_name: 'SplitMate',
@@ -655,18 +660,18 @@ graph TD
             background_color: '#6c3ce0',
             theme_color: '#6c3ce0',
             icons: [
-                { src: i192, sizes: '192x192', type: 'image/png' },
-                { src: i512, sizes: '512x512', type: 'image/png' }
+                { src: i192, sizes: '192x192', type: 'image/svg+xml' },
+                { src: i512, sizes: '512x512', type: 'image/svg+xml' }
             ]
         };
         const manifestDataUri = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
         document.getElementById('manifestLink').href = manifestDataUri;
 
-        // تسجيل Service Worker بالطريقة الصحيحة
+        // تسجيل Service Worker (يعمل فقط على HTTPS أو localhost)
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js')
                 .then(reg => console.log('Service Worker enregistré', reg))
-                .catch(err => console.error('Erreur SW:', err));
+                .catch(err => console.warn('Erreur SW (attendu si fichier local) :', err));
         }
 
         // ============ Install Button Logic ============
