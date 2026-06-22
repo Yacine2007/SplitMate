@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>SplitMate – Diagrammes UML</title>
+
+    <!-- PWA Essentials -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6c3ce0">
+    <link rel="apple-touch-icon" sizes="180x180" href="" id="appleIcon180">
+    <link rel="apple-touch-icon" sizes="192x192" href="" id="appleIcon192">
+    <link rel="icon" type="image/png" sizes="192x192" href="" id="favicon192">
+    <link rel="icon" type="image/png" sizes="512x512" href="" id="favicon512">
+    <link rel="manifest" href="" id="manifestLink">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c3ce0;
+            --primary-light: #8b5cf6;
+            --accent: #f59e0b;
+            --bg: #f8f7fc;
+            --surface: #ffffff;
+            --text: #1e1b2e;
+            --text-light: #5c5776;
+            --border: #e2e0eb;
+            --shadow: 0 4px 16px rgba(0,0,0,0.07);
+            --radius: 14px;
+            --sidebar-width: 280px;
+            --navbar-height: 56px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-top: var(--navbar-height);
+        }
+
+        /* Fixed navbar */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: var(--navbar-height);
+            background: var(--surface); box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            z-index: 1001; display: flex; align-items: center; padding: 0 20px; gap: 12px;
+        }
+        .navbar .menu-btn {
+            background: none; border: none; font-size: 1.4rem; cursor: pointer;
+            color: var(--text); width: 40px; height: 40px; display: flex;
+            align-items: center; justify-content: center; border-radius: 10px; transition: background 0.2s;
+        }
+        .navbar .menu-btn:hover { background: rgba(0,0,0,0.05); }
+        .navbar-brand {
+            display: flex; align-items: center; gap: 8px; font-weight: 700;
+            font-size: 1.2rem; color: var(--primary); text-decoration: none;
+        }
+        .navbar-brand i { font-size: 1.4rem; color: var(--accent); }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: var(--navbar-height); left: 0;
+            width: var(--sidebar-width); height: calc(100vh - var(--navbar-height));
+            background: linear-gradient(180deg, #1a1035 0%, #0d0820 100%);
+            color: #fff; z-index: 1000; overflow-y: auto;
+            box-shadow: 4px 0 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            display: flex; flex-direction: column; transform: translateX(0);
+        }
+        .sidebar-header {
+            padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center;
+        }
+        .sidebar-logo {
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px;
+        }
+        .sidebar-logo .icon-circle {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+        .sidebar-logo h2 {
+            font-size: 1.4rem; font-weight: 700;
+            background: linear-gradient(135deg, #fff, #d4c5f9);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .sidebar-subtitle { font-size: 0.75rem; color: rgba(255,255,255,0.55); }
+        .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-nav a {
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px;
+            color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+            transition: all 0.2s; cursor: pointer;
+        }
+        .sidebar-nav a i { width: 20px; text-align: center; font-size: 1rem; }
+        .sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sidebar-nav a.active { background: rgba(139,92,246,0.3); color: #fff; font-weight: 600; }
+
+        /* Main area */
+        .main-area {
+            display: flex; margin-left: var(--sidebar-width);
+            min-height: calc(100vh - var(--navbar-height)); transition: margin-left 0.3s ease;
+        }
+        .content-wrapper {
+            flex: 1; padding: 28px 32px 60px; max-width: 1100px; width: 100%; margin: 0 auto;
+        }
+
+        /* Sections */
+        .home-section, .diagram-section { display: none; }
+        .home-section.active, .diagram-section.active { display: block; }
+
+        /* Home */
+        .home-header { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .home-header .app-icon {
+            width: 80px; height: 80px; border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+            color: #fff; box-shadow: 0 8px 24px rgba(108,60,224,0.4);
+        }
+        .home-title h1 { font-size: 2rem; font-weight: 700; }
+        .home-title p { font-size: 1rem; color: var(--text-light); max-width: 600px; margin-top: 8px; }
+
+        /* Install button */
+        .install-btn-container {
+            margin-top: 16px;
+        }
+        .install-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 16px rgba(108,60,224,0.3);
+            transition: all 0.3s;
+        }
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(108,60,224,0.4);
+        }
+        .install-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .install-btn i {
+            font-size: 1.2rem;
+        }
+
+        .feature-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 32px;
+        }
+        .feature-card {
+            background: var(--surface); border-radius: var(--radius); padding: 20px;
+            box-shadow: var(--shadow); border: 1px solid var(--border); transition: transform 0.2s;
+        }
+        .feature-card:hover { transform: translateY(-4px); }
+        .feature-icon {
+            width: 48px; height: 48px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 12px;
+        }
+        .feature-card h3 { font-size: 1rem; margin-bottom: 6px; }
+        .feature-card p { font-size: 0.85rem; color: var(--text-light); }
+
+        /* Diagram cards */
+        .diagram-card {
+            background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+            overflow: hidden; border: 1px solid var(--border);
+        }
+        .diagram-card-header {
+            display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+            border-bottom: 1px solid var(--border); background: #faf9fe; cursor: pointer; user-select: none;
+        }
+        .diagram-icon {
+            width: 38px; height: 38px; border-radius: 10px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+        }
+        .icon-use-case { background: #ede9fe; color: #7c3aed; }
+        .icon-class { background: #fce7f3; color: #db2777; }
+        .icon-sequence { background: #dbeafe; color: #2563eb; }
+        .icon-activity { background: #fef3c7; color: #d97706; }
+        .icon-er { background: #d1fae5; color: #059669; }
+        .icon-component { background: #e0e7ff; color: #4f46e5; }
+        .header-info h3 { font-size: 0.95rem; font-weight: 600; margin: 0; }
+        .header-actions { margin-left: auto; display: flex; gap: 6px; }
+        .btn-icon {
+            width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+            background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--text-light); transition: all 0.2s; font-size: 0.8rem;
+        }
+        .btn-icon:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .collapse-arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--text-light); }
+        .diagram-card.collapsed .collapse-arrow { transform: rotate(-90deg); }
+        .diagram-card-body {
+            padding: 10px 6px 14px; overflow: hidden; display: flex; justify-content: center;
+            background: #fdfdfe; min-height: 200px; position: relative;
+        }
+        .diagram-card.collapsed .diagram-card-body { display: none; }
+        .diagram-card-footer {
+            padding: 8px 16px; border-top: 1px solid var(--border);
+            font-size: 0.7rem; color: var(--text-light); background: #faf9fe;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .diagram-card.collapsed .diagram-card-footer { display: none; }
+
+        /* Zoom & Pan */
+        .zoom-container {
+            width: 100%; height: 100%; cursor: grab; transform-origin: 0 0;
+            will-change: transform; position: relative;
+        }
+        .zoom-container svg { width: 100%; height: auto; display: block; }
+        .zoom-container:active { cursor: grabbing; }
+        .zoom-container.dragging { cursor: grabbing; }
+
+        /* Loading spinner */
+        .spinner-container {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 5; color: var(--primary); font-size: 2rem;
+        }
+        .spinner-container.hidden { display: none; }
+
+        /* Fullscreen */
+        .fullscreen-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center;
+        }
+        .fullscreen-modal.active { display: flex; }
+        .modal-content {
+            width: 90vw; height: 90vh; background: #fff; border-radius: 12px;
+            overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center;
+        }
+        .modal-close {
+            position: absolute; top: 16px; right: 16px; z-index: 10;
+            width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff;
+            border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .modal-zoom-controls { position: absolute; bottom: 16px; right: 16px; z-index: 10; display: flex; gap: 8px; }
+        .modal-zoom-controls button {
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: rgba(0,0,0,0.5); color: #fff; font-size: 1rem; cursor: pointer;
+        }
+
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: #1a1035; color: #fff; padding: 10px 22px; border-radius: 24px;
+            font-size: 0.85rem; font-weight: 500; z-index: 9999;
+            opacity: 0; transition: all 0.4s ease; pointer-events: none; white-space: nowrap;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-area { margin-left: 0; }
+            .content-wrapper { padding: 20px 14px 40px; }
+            .home-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fixed Navbar -->
+    <nav class="navbar">
+        <button class="menu-btn" id="navbarMenuBtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <a href="#" class="navbar-brand" id="homeLink"><i class="fa-solid fa-hand-holding-heart"></i> SplitMate</a>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <h2>SplitMate</h2>
+            </div>
+            <p class="sidebar-subtitle">Documentation UML</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-target="home"><i class="fa-solid fa-house"></i> Accueil</a>
+            <a href="#" class="nav-link" data-target="use-case"><i class="fa-solid fa-person-circle-check"></i> Cas d'utilisation</a>
+            <a href="#" class="nav-link" data-target="class"><i class="fa-solid fa-cubes"></i> Classes</a>
+            <a href="#" class="nav-link" data-target="sequence"><i class="fa-solid fa-arrows-spin"></i> Séquence</a>
+            <a href="#" class="nav-link" data-target="activity"><i class="fa-solid fa-diagram-project"></i> Activité</a>
+            <a href="#" class="nav-link" data-target="er"><i class="fa-solid fa-database"></i> Entité-Relation</a>
+            <a href="#" class="nav-link" data-target="component"><i class="fa-solid fa-server"></i> Composants</a>
+        </nav>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main-area" id="mainArea">
+        <div class="content-wrapper" id="contentWrapper">
+            <!-- Accueil -->
+            <section class="home-section active" id="home">
+                <div class="home-header">
+                    <div class="app-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <div class="home-title">
+                        <h1>SplitMate</h1>
+                        <p>Application de partage équitable des frais entre amis, couples et groupes.</p>
+                        <div class="install-btn-container">
+                            <button class="install-btn" id="internalInstallBtn" style="display:none;">
+                                <i class="fa-solid fa-download"></i> تثبيت التطبيق
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon icon-use-case"><i class="fa-solid fa-user-plus"></i></div>
+                        <h3>Invitation sécurisée</h3>
+                        <p>Ajoutez vos amis via un code de vérification 2FA.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:#fce7f3;color:#db2777;"><i class="fa-solid fa-calculator"></i></div>
+                        <h3>Division automatique</h3>
+                        <p>Chaque dépense est divisée équitablement.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:#dbeafe;color:#2563eb;"><i class="fa-solid fa-credit-card"></i></div>
+                        <h3>Paiement en ligne</h3>
+                        <p>Réglez votre part via Stripe ou CIB.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-wallet"></i></div>
+                        <h3>Portefeuille commun</h3>
+                        <p>Suivez le solde partagé du groupe.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:#d1fae5;color:#059669;"><i class="fa-solid fa-utensils"></i></div>
+                        <h3>Découvrez des lieux</h3>
+                        <p>Restaurants, cinémas et activités.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:#e0e7ff;color:#4f46e5;"><i class="fa-solid fa-bell"></i></div>
+                        <h3>Notifications</h3>
+                        <p>Alertes en temps réel.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagrammes UML -->
+            <!-- Use Case -->
+            <div class="diagram-section" id="use-case">
+                <div class="diagram-card" id="useCaseCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-use-case"><i class="fa-solid fa-person-circle-check"></i></div>
+                        <div class="header-info"><h3>Diagramme de cas d'utilisation</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('useCaseCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomUseCase">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="useCaseCode">
+graph TD
+    A[Utilisateur] -->|Créer un groupe| B((Groupe))
+    A -->|Ajouter une dépense| C((Dépense))
+    A -->|Inviter des amis| D((Invitation))
+    A -->|Payer sa part| E((Paiement))
+    E -->|Stripe| F[Passerelle de paiement]
+    B -->|Calcule les soldes| G((Solde))
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Acteurs : Utilisateur, Système de paiement
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Diagram -->
+            <div class="diagram-section" id="class">
+                <div class="diagram-card" id="classCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-class"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="header-info"><h3>Diagramme de classes</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('classCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomClass">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="classCode">
+classDiagram
+    class Utilisateur {
+        +String id
+        +String nom
+        +String email
+        +String motDePasse
+        +créerGroupe()
+        +payer()
+    }
+
+    class Groupe {
+        +String id
+        +String nom
+        +Date dateCréation
+        +ajouterMembre()
+        +calculerSoldes()
+    }
+
+    class Dépense {
+        +String id
+        +Float montant
+        +String description
+        +Date date
+        +diviser()
+    }
+
+    class Paiement {
+        +String id
+        +Float montant
+        +String statut
+        +traiter()
+    }
+
+    Utilisateur "1" --> "*" Groupe : appartient
+    Groupe "1" --> "*" Dépense : contient
+    Utilisateur "1" --> "*" Paiement : effectue
+    Dépense "1" --> "*" Paiement : réglée par
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Classes principales de l'application
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sequence Diagram -->
+            <div class="diagram-section" id="sequence">
+                <div class="diagram-card" id="seqCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-sequence"><i class="fa-solid fa-arrows-spin"></i></div>
+                        <div class="header-info"><h3>Diagramme de séquence</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('seqCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomSeq">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="seqCode">
+sequenceDiagram
+    participant U as Utilisateur
+    participant A as App (Frontend)
+    participant S as Serveur (API)
+    participant DB as Base de données
+    U->>A: Ajouter une dépense (montant, description)
+    A->>S: POST /expenses
+    S->>DB: Insérer dépense
+    DB-->>S: Succès
+    S-->>A: Dépense créée
+    A->>U: Afficher confirmation
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Scénario : ajout d'une dépense
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Diagram -->
+            <div class="diagram-section" id="activity">
+                <div class="diagram-card" id="actCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-activity"><i class="fa-solid fa-diagram-project"></i></div>
+                        <div class="header-info"><h3>Diagramme d'activité</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('actCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomAct">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="actCode">
+graph TD
+    Démarrer --> SaisirDépense[Saisir le montant et la description]
+    SaisirDépense --> ChoisirGroupe[Choisir le groupe]
+    ChoisirGroupe --> Diviser[Diviser la dépense automatiquement]
+    Diviser --> Notifier[Notifier les membres]
+    Notifier --> AttendrePaiement[Attendre les paiements]
+    AttendrePaiement -->|Paiements reçus| Clôturer[Clôturer la dépense]
+    AttendrePaiement -->|Relance| Relancer[Relancer les retardataires]
+    Relancer --> AttendrePaiement
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Processus de partage d'une dépense
+                    </div>
+                </div>
+            </div>
+
+            <!-- ER Diagram (corrigé) -->
+            <div class="diagram-section" id="er">
+                <div class="diagram-card" id="erCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-er"><i class="fa-solid fa-database"></i></div>
+                        <div class="header-info"><h3>Diagramme Entité-Relation</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('erCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomEr">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="erCode">
+erDiagram
+    UTILISATEUR ||--o{ GROUPE : "appartient"
+    GROUPE ||--o{ DEPENSE : "contient"
+    UTILISATEUR ||--o{ PAIEMENT : "effectue"
+    DEPENSE ||--o{ PAIEMENT : "regle"
+
+    UTILISATEUR {
+        string id
+        string nom
+        string email
+        string mot_de_passe
+    }
+    GROUPE {
+        string id
+        string nom
+        date date_creation
+    }
+    DEPENSE {
+        string id
+        float montant
+        string description
+        date date
+    }
+    PAIEMENT {
+        string id
+        float montant
+        string statut
+        date date_paiement
+    }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Structure de la base de données
+                    </div>
+                </div>
+            </div>
+
+            <!-- Component Diagram -->
+            <div class="diagram-section" id="component">
+                <div class="diagram-card" id="compCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-component"><i class="fa-solid fa-server"></i></div>
+                        <div class="header-info"><h3>Diagramme de composants</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('compCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomComp">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="compCode">
+graph TD
+    subgraph Frontend
+        A[Application Mobile]
+        B[Interface Web]
+    end
+    subgraph Backend
+        C[API REST]
+        D[Service d'authentification]
+        E[Service de paiement]
+    end
+    subgraph Externe
+        F[Stripe]
+        G[CIB]
+    end
+    A --> C
+    B --> C
+    C --> D
+    C --> E
+    E --> F
+    E --> G
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Architecture globale du système
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div class="fullscreen-modal" id="fullscreenModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+            <div class="zoom-container" id="modalZoomContainer" style="width:100%;height:100%;"></div>
+            <div class="modal-zoom-controls">
+                <button id="modalZoomIn"><i class="fa-solid fa-plus"></i></button>
+                <button id="modalZoomOut"><i class="fa-solid fa-minus"></i></button>
+                <button id="modalZoomReset"><i class="fa-solid fa-rotate-left"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ============ PWA Icons & Manifest ============
+        // توليد أيقونات SVG بسيطة مستقلة عن الخطوط
+        function generateSvgIcon(size) {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+                <defs>
+                    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8b5cf6"/>
+                        <stop offset="100%" style="stop-color:#f59e0b"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="${size/2}" cy="${size/2}" r="${size*0.42}" fill="url(#g)"/>
+                <text x="${size/2}" y="${size/2}" text-anchor="middle" dy=".35em" font-size="${size*0.45}" fill="white" font-family="Arial, sans-serif" font-weight="bold">♥</text>
+            </svg>`;
+            return 'data:image/svg+xml,' + encodeURIComponent(svg);
+        }
+        const i192 = generateSvgIcon(192);
+        const i512 = generateSvgIcon(512);
+        const i180 = generateSvgIcon(180);
+        document.getElementById('appleIcon180').href = i180;
+        document.getElementById('appleIcon192').href = i192;
+        document.getElementById('favicon192').href = i192;
+        document.getElementById('favicon512').href = i512;
+
+        // إنشاء المانفست مباشرةً كـ data URI
+        const manifest = {
+            name: 'SplitMate UML',
+            short_name: 'SplitMate',
+            start_url: '.',
+            display: 'standalone',
+            background_color: '#6c3ce0',
+            theme_color: '#6c3ce0',
+            icons: [
+                { src: i192, sizes: '192x192', type: 'image/svg+xml' },
+                { src: i512, sizes: '512x512', type: 'image/svg+xml' }
+            ]
+        };
+        const manifestDataUri = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+        document.getElementById('manifestLink').href = manifestDataUri;
+
+        // تسجيل Service Worker (استخدم مساراً نسبياً)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker enregistré', reg))
+                .catch(err => console.warn('Erreur SW :', err));
+        }
+
+        // ============ Install Button Logic ============
+        let deferredPrompt;
+        const installBtn = document.getElementById('internalInstallBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-flex';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                installBtn.style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installBtn.style.display = 'none';
+        });
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            installBtn.style.display = 'none';
+        }
+
+        // ============ Mermaid & UI ============
+        mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose', fontFamily: 'Poppins, Cairo, sans-serif' });
+        async function renderDiagrams() {
+            const elements = document.querySelectorAll('.mermaid');
+            for (const el of elements) {
+                try { await mermaid.run({ nodes: [el] }); } catch(e) { console.error('Mermaid error:', e); }
+                const cont = el.closest('.zoom-container');
+                if(cont) { const spin = cont.querySelector('.spinner-container'); if(spin) spin.classList.add('hidden'); }
+            }
+        }
+        window.addEventListener('load', renderDiagrams);
+
+        // Navigation
+        const homeSec = document.getElementById('home');
+        const diagSecs = document.querySelectorAll('.diagram-section');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const sidebar = document.getElementById('sidebar');
+        function showSection(id) {
+            homeSec.classList.remove('active');
+            diagSecs.forEach(s => s.classList.remove('active'));
+            if(id === 'home') homeSec.classList.add('active');
+            else document.getElementById(id)?.classList.add('active');
+            navLinks.forEach(l => l.classList.remove('active'));
+            const activeLink = document.querySelector(`.sidebar-nav a[data-target="${id}"]`);
+            if(activeLink) activeLink.classList.add('active');
+            if(window.innerWidth <= 768) sidebar.classList.remove('open');
+        }
+        navLinks.forEach(link => link.addEventListener('click', e => { e.preventDefault(); showSection(link.dataset.target); }));
+        document.getElementById('homeLink').addEventListener('click', e => { e.preventDefault(); showSection('home'); });
+        document.getElementById('navbarMenuBtn').addEventListener('click', () => sidebar.classList.toggle('open'));
+
+        function toggleCard(h) { h.closest('.diagram-card').classList.toggle('collapsed'); }
+        function copyCode(id) {
+            const pre = document.getElementById(id);
+            if(pre) navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
+                const t = document.getElementById('toast'); t.textContent = 'Code copié !'; t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 2500);
+            });
+        }
+    </script>
+</body>
+</html>
