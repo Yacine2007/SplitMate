@@ -266,50 +266,50 @@
     <!-- Main Area -->
     <div class="main-area" id="mainArea">
         <div class="content-wrapper" id="contentWrapper">
-            <!-- Accueil (visible par défaut) -->
+            <!-- Accueil -->
             <section class="home-section active" id="home">
                 <div class="home-header">
                     <div class="app-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
                     <div class="home-title">
                         <h1>SplitMate</h1>
-                        <p>Application de partage equitable des frais entre amis, couples et groupes. Simplifiez les comptes communs avec un portefeuille partage et des propositions d'activites.</p>
+                        <p>Application de partage equitable des frais entre amis, couples et groupes.</p>
                     </div>
                 </div>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon icon-use-case"><i class="fa-solid fa-user-plus"></i></div>
                         <h3>Invitation securisee</h3>
-                        <p>Ajoutez vos amis via un code de verification 2FA. Creez des espaces prives et partages.</p>
+                        <p>Ajoutez vos amis via un code de verification 2FA.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#fce7f3;color:#db2777;"><i class="fa-solid fa-calculator"></i></div>
                         <h3>Division automatique</h3>
-                        <p>Chaque depense est divisee equitablement entre les membres du groupe.</p>
+                        <p>Chaque depense est divisee equitablement.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#dbeafe;color:#2563eb;"><i class="fa-solid fa-credit-card"></i></div>
                         <h3>Paiement en ligne</h3>
-                        <p>Reglez votre part directement via Stripe ou CIB. Statut en temps reel.</p>
+                        <p>Reglez votre part via Stripe ou CIB.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-wallet"></i></div>
                         <h3>Portefeuille commun</h3>
-                        <p>Suivez le solde partage du groupe. Chaque mouvement est enregistre.</p>
+                        <p>Suivez le solde partage du groupe.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#d1fae5;color:#059669;"><i class="fa-solid fa-utensils"></i></div>
                         <h3>Decouvrez des lieux</h3>
-                        <p>Parcourez restaurants, cinemas et associez une depense a une sortie.</p>
+                        <p>Restaurants, cinemas et activites.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#e0e7ff;color:#4f46e5;"><i class="fa-solid fa-bell"></i></div>
                         <h3>Notifications</h3>
-                        <p>Recevez des alertes quand une depense est ajoutee ou un paiement effectue.</p>
+                        <p>Alertes en temps reel.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Diagramme Cas d'utilisation -->
+            <!-- Diagrams -->
             <div class="diagram-section" id="use-case">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -338,9 +338,9 @@ flowchart TB
         UC9["Parcourir restaurants / cinemas"]
         UC10["Proposer une activite"]
     end
-    USER["Utilisateur (Amis, couples)"]
+    USER["Utilisateur"]
     ADMIN["Administrateur"]
-    PAYMENT["Passerelle de paiement (Stripe, CIB)"]
+    PAYMENT["Passerelle de paiement"]
     USER --> UC1
     USER --> UC2
     USER --> UC3
@@ -356,11 +356,9 @@ flowchart TB
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Acteurs : Utilisateur, Admin, Passerelle de paiement.</div>
                 </div>
             </div>
 
-            <!-- Diagramme de Classes -->
             <div class="diagram-section" id="class">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -382,8 +380,6 @@ classDiagram
         +String nom
         +String email
         +Boolean deuxFacteursActive
-        +sinscrire() Boolean
-        +activer2FA() void
     }
     class Groupe {
         +String id
@@ -393,7 +389,6 @@ classDiagram
     class Depense {
         +String id
         +Double montant
-        +String categorie
     }
     class Portefeuille {
         +String id
@@ -401,19 +396,15 @@ classDiagram
     }
     class Paiement {
         +String id
-        +Double montant
         +String statut
     }
     class Invitation {
         +String code2FA
     }
     class MembreGroupe {
-        +String userId
-        +String groupeId
         +String role
-        +Double balanceIndividuelle
     }
-    Utilisateur "1" --> "many" Invitation : envoie
+    Utilisateur "1" --> "many" Invitation
     Utilisateur "many" --> "many" Groupe : via MembreGroupe
     Groupe "1" --> "many" Depense
     Groupe "1" --> "1" Portefeuille
@@ -422,16 +413,14 @@ classDiagram
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Invitation avec code 2FA. Portefeuille 1:1 Groupe.</div>
                 </div>
             </div>
 
-            <!-- Sequence -->
             <div class="diagram-section" id="sequence">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-sequence"><i class="fa-solid fa-arrows-spin"></i></div>
-                        <div class="header-info"><h3>Diagramme de Sequence – Paiement partage</h3></div>
+                        <div class="header-info"><h3>Sequence – Paiement partage</h3></div>
                         <div class="header-actions">
                             <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-sequence')"><i class="fa-solid fa-copy"></i></button>
                             <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('sequence')"><i class="fa-solid fa-expand"></i></button>
@@ -447,31 +436,24 @@ sequenceDiagram
     actor B as Bilal
     actor C as Chaima
     participant App as SplitMate
-    participant Server as Serveur
     participant Pay as Stripe/CIB
     A->>App: Ajoute depense 9000 DA
-    App->>Server: POST /expenses
-    Server->>Server: Division 9000/3
-    Server-->>App: Parts calculees
+    App->>App: Division 3000 DA chacun
     App->>B: Notification 3000 DA
     App->>C: Notification 3000 DA
-    B->>App: Payer maintenant
-    App->>Pay: Paiement 3000 DA
-    Pay-->>Server: Confirmation
-    Server-->>App: Paiement Bilal OK
-    C->>App: Payer maintenant
-    App->>Pay: Paiement 3000 DA
-    Pay-->>Server: Confirmation
-    Server-->>App: Paiement Chaima OK
-    Server->>App: Depense reglee !
+    B->>App: Payer 3000 DA
+    App->>Pay: Paiement
+    Pay-->>App: Confirmation
+    C->>App: Payer 3000 DA
+    App->>Pay: Paiement
+    Pay-->>App: Confirmation
+    App->>A: Depense reglee !
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Scenario complet.</div>
                 </div>
             </div>
 
-            <!-- Activite -->
             <div class="diagram-section" id="activity">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -488,46 +470,37 @@ sequenceDiagram
                             <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-activity">
 flowchart TD
-    Start([Debut]) --> Login[Connexion / Inscription]
-    Login --> Has2FA{2FA activee ?}
+    Start([Debut]) --> Login[Connexion]
+    Login --> Has2FA{2FA ?}
     Has2FA -->|Oui| TwoFA[Saisir code]
-    Has2FA -->|Non| Dashboard[Tableau de bord]
-    TwoFA --> CodeValid{Valide ?} -->|Oui| Dashboard
-    CodeValid -->|Non| TwoFA
-    Dashboard --> Choice{Action ?}
-    Choice -->|Ajouter amis| Invite[Envoyer invitation + code 2FA]
-    Invite --> FriendAccept{Accepte ?} -->|Oui| SharedSpace[Espace partage]
-    FriendAccept -->|Non| Invite
-    SharedSpace --> Dashboard
-    Choice -->|Nouvelle depense| SelectGroup[Selectionner groupe]
-    SelectGroup --> EnterAmount[Saisir montant]
-    EnterAmount --> AutoSplit[Division automatique]
-    AutoSplit --> NotifyMembers[Notifier membres]
-    NotifyMembers --> ViewShares[Voir parts]
+    Has2FA -->|Non| Dashboard
+    TwoFA --> Dashboard
+    Dashboard --> Choice{Action}
+    Choice -->|Ajouter amis| Invite[Invitation 2FA]
+    Invite --> SharedSpace[Espace partage]
+    Choice -->|Nouvelle depense| SelectGroup[Groupe]
+    SelectGroup --> AutoSplit[Division automatique]
+    AutoSplit --> ViewShares[Parts visibles]
     ViewShares --> PayNow{Payer ?}
     PayNow -->|Oui| OnlinePay[Paiement Stripe/CIB]
-    OnlinePay --> ConfirmPay{Confirme ?} -->|Oui| UpdateWallet[Mise a jour portefeuille]
-    ConfirmPay -->|Non| Retry[Reessayer] --> OnlinePay
+    OnlinePay --> ConfirmPay{Confirme ?}
+    ConfirmPay -->|Oui| Close[Depense cloturee]
+    ConfirmPay -->|Non| Retry
+    Retry --> OnlinePay
     PayNow -->|Plus tard| Pending[En attente]
-    UpdateWallet --> AllPaid{Tous paye ?} -->|Oui| Close[Depense cloturee]
-    AllPaid -->|Non| ViewShares
     Pending --> Close
     Close --> End([Termine])
-    Choice -->|Explorer| Browse[Parcourir activites]
-    Browse --> Filter[Filtrer] --> SelectPlace[Choisir lieu] --> SelectGroup
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Flux complet.</div>
                 </div>
             </div>
 
-            <!-- ER -->
             <div class="diagram-section" id="er">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
                         <div class="diagram-icon icon-er"><i class="fa-solid fa-database"></i></div>
-                        <div class="header-info"><h3>Modele Entite-Relation (ER)</h3></div>
+                        <div class="header-info"><h3>Modele Entite-Relation</h3></div>
                         <div class="header-actions">
                             <button class="btn-icon" title="Copier" onclick="event.stopPropagation(); copyCode('mermaid-er')"><i class="fa-solid fa-copy"></i></button>
                             <button class="btn-icon" title="Plein ecran" onclick="event.stopPropagation(); openFullscreen('er')"><i class="fa-solid fa-expand"></i></button>
@@ -552,7 +525,6 @@ erDiagram
     MEMBRE_GROUPE {
         string userId PK_FK
         string groupeId PK_FK
-        double balanceIndividuelle
     }
     DEPENSE {
         string id PK
@@ -590,11 +562,9 @@ erDiagram
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Tables de jointure.</div>
                 </div>
             </div>
 
-            <!-- Composants -->
             <div class="diagram-section" id="component">
                 <div class="diagram-card">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -611,31 +581,27 @@ erDiagram
                             <div class="spinner-container"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
                             <pre class="mermaid" id="mermaid-component">
 flowchart TB
-    subgraph MOBILE["Application Mobile (React Native)"]
+    subgraph MOBILE["React Native"]
         UI["Interface Utilisateur"]
-        AuthModule["Module Auth (2FA)"]
-        FriendsModule["Module Amis"]
+        AuthModule["Module Auth"]
         ExpenseModule["Module Depenses"]
-        PaymentModule["Paiement"]
     end
-    subgraph BACKEND["Backend Node.js"]
+    subgraph BACKEND["Node.js"]
         APIGateway["API Gateway"]
         AuthService["Auth Service"]
-        ExpenseService["Service Depense"]
-        PaymentService["Service Paiement (Stripe)"]
+        PaymentService["Service Paiement"]
     end
-    subgraph DATA["Donnees"]
-        MainDB["PostgreSQL"]
+    subgraph DATA["PostgreSQL"]
+        MainDB[("Base de donnees")]
     end
     UI --> AuthModule
     AuthModule --> APIGateway
     APIGateway --> AuthService
-    AuthService --> MainDB
     PaymentService --> StripeAPI["Stripe/CIB"]
+    AuthService --> MainDB
                             </pre>
                         </div>
                     </div>
-                    <div class="diagram-card-footer"><i class="fa-solid fa-circle-info"></i> Architecture simplifiee.</div>
                 </div>
             </div>
         </div>
@@ -659,218 +625,8 @@ flowchart TB
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============ Mermaid manual rendering with spinner hide ============
-        mermaid.initialize({
-            startOnLoad: false,
-            theme: 'default',
-            securityLevel: 'loose',
-            fontFamily: 'Poppins, Cairo, sans-serif',
-            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 16 },
-            sequence: { useMaxWidth: true, actorMargin: 40, messageMargin: 20, wrap: true, width: 140 },
-            classDiagram: { useMaxWidth: true, padding: 12 },
-            er: { useMaxWidth: true, padding: 12 },
-        });
-
-        async function renderDiagrams() {
-            const elements = document.querySelectorAll('.mermaid');
-            for (const el of elements) {
-                try {
-                    await mermaid.run({ nodes: [el] });
-                } catch (e) {
-                    console.error('Mermaid render error', e);
-                }
-                // Hide spinner in this zoom container
-                const container = el.closest('.zoom-container');
-                if (container) {
-                    const spinner = container.querySelector('.spinner-container');
-                    if (spinner) spinner.classList.add('hidden');
-                }
-            }
-        }
-
-        window.addEventListener('load', renderDiagrams);
-
-        // ============ SPA Navigation ============
-        const homeSection = document.getElementById('home');
-        const diagramSections = document.querySelectorAll('.diagram-section');
-        const navLinks = document.querySelectorAll('.sidebar-nav a');
-        const sidebar = document.getElementById('sidebar');
-
-        function showSection(targetId) {
-            homeSection.classList.remove('active');
-            diagramSections.forEach(s => s.classList.remove('active'));
-            if (targetId === 'home') {
-                homeSection.classList.add('active');
-            } else {
-                const target = document.getElementById(targetId);
-                if (target) target.classList.add('active');
-            }
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-target') === targetId) link.classList.add('active');
-            });
-            if (window.innerWidth <= 768) sidebar.classList.remove('open');
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                showSection(link.getAttribute('data-target'));
-            });
-        });
-
-        document.getElementById('homeLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection('home');
-        });
-
-        // Sidebar toggle
-        document.getElementById('navbarMenuBtn').addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
-
-        // Collapse
-        function toggleCard(header) {
-            header.closest('.diagram-card').classList.toggle('collapsed');
-        }
-
-        // Copy
-        function copyCode(mermaidId) {
-            const pre = document.getElementById(mermaidId);
-            if (!pre) return;
-            navigator.clipboard.writeText(pre.textContent.trim()).then(() => showToast('Code Mermaid copie !'));
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
-        }
-
-        // Zoom & Pan
-        function setupZoomPan(container) {
-            let scale = 1, panX = 0, panY = 0;
-            let isDragging = false, startX, startY, lastPanX, lastPanY;
-            const el = container;
-            function applyTransform() {
-                const svg = el.querySelector('svg');
-                if (svg) {
-                    svg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
-                    svg.style.transformOrigin = '0 0';
-                }
-            }
-            el.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                const delta = e.deltaY > 0 ? 0.9 : 1.1;
-                const newScale = Math.min(3, Math.max(0.3, scale * delta));
-                const rect = el.getBoundingClientRect();
-                const mx = e.clientX - rect.left;
-                const my = e.clientY - rect.top;
-                const sx = (mx - panX) / scale;
-                const sy = (my - panY) / scale;
-                panX = mx - sx * newScale;
-                panY = my - sy * newScale;
-                scale = newScale;
-                applyTransform();
-            });
-            el.addEventListener('mousedown', (e) => {
-                isDragging = true; startX = e.clientX; startY = e.clientY;
-                lastPanX = panX; lastPanY = panY; el.classList.add('dragging');
-            });
-            window.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                panX = lastPanX + (e.clientX - startX);
-                panY = lastPanY + (e.clientY - startY);
-                applyTransform();
-            });
-            window.addEventListener('mouseup', () => { isDragging = false; el.classList.remove('dragging'); });
-            // Touch
-            let initialPinchDistance, initialScale;
-            el.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const touches = [...e.touches];
-                if (touches.length === 1) {
-                    isDragging = true; startX = touches[0].clientX; startY = touches[0].clientY;
-                    lastPanX = panX; lastPanY = panY;
-                } else if (touches.length === 2) {
-                    isDragging = false;
-                    const dx = touches[0].clientX - touches[1].clientX;
-                    const dy = touches[0].clientY - touches[1].clientY;
-                    initialPinchDistance = Math.hypot(dx, dy);
-                    initialScale = scale;
-                }
-            });
-            el.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const touches = [...e.touches];
-                if (touches.length === 1 && isDragging) {
-                    panX = lastPanX + (touches[0].clientX - startX);
-                    panY = lastPanY + (touches[0].clientY - startY);
-                    applyTransform();
-                } else if (touches.length === 2) {
-                    const dx = touches[0].clientX - touches[1].clientX;
-                    const dy = touches[0].clientY - touches[1].clientY;
-                    const dist = Math.hypot(dx, dy);
-                    const newScale = Math.min(3, Math.max(0.3, initialScale * (dist / initialPinchDistance)));
-                    const rect = el.getBoundingClientRect();
-                    const mx = (touches[0].clientX + touches[1].clientX)/2 - rect.left;
-                    const my = (touches[0].clientY + touches[1].clientY)/2 - rect.top;
-                    const sx = (mx - panX) / scale;
-                    const sy = (my - panY) / scale;
-                    panX = mx - sx * newScale;
-                    panY = my - sy * newScale;
-                    scale = newScale;
-                    applyTransform();
-                }
-            });
-            el.addEventListener('touchend', () => { isDragging = false; });
-        }
-        document.querySelectorAll('.zoom-container').forEach(c => setupZoomPan(c));
-
-        // Fullscreen
-        const modal = document.getElementById('fullscreenModal');
-        const modalZoomContainer = document.getElementById('modalZoomContainer');
-        const modalSpinner = modalZoomContainer.querySelector('.spinner-container');
-        function openFullscreen(diagramKey) {
-            const sourceContainer = document.getElementById('zoom-' + diagramKey);
-            if (!sourceContainer) return;
-            const svg = sourceContainer.querySelector('svg');
-            if (svg) {
-                modalZoomContainer.innerHTML = '';
-                modalZoomContainer.appendChild(svg.cloneNode(true));
-                // re-add spinner (hidden)
-                const spinner = document.createElement('div');
-                spinner.className = 'spinner-container hidden';
-                spinner.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-                modalZoomContainer.appendChild(spinner);
-            }
-            modal.classList.add('active');
-            modalZoomContainer.style.transform = '';
-            const innerSvg = modalZoomContainer.querySelector('svg');
-            if (innerSvg) innerSvg.style.transform = '';
-        }
-        document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('active'));
-        document.getElementById('modalZoomIn').addEventListener('click', () => {
-            const svg = modalZoomContainer.querySelector('svg');
-            if (!svg) return;
-            let cur = parseFloat(svg.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
-            svg.style.transform = `scale(${Math.min(3, cur * 1.2)})`;
-        });
-        document.getElementById('modalZoomOut').addEventListener('click', () => {
-            const svg = modalZoomContainer.querySelector('svg');
-            if (!svg) return;
-            let cur = parseFloat(svg.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
-            svg.style.transform = `scale(${Math.max(0.3, cur / 1.2)})`;
-        });
-        document.getElementById('modalZoomReset').addEventListener('click', () => {
-            const svg = modalZoomContainer.querySelector('svg');
-            if (svg) svg.style.transform = 'scale(1)';
-        });
-
-        // PWA Icon & Manifest
-        function generateIcon() {
+        // ============ PWA Icon & Manifest (data URIs, no SW needed) ============
+        function generateIconBase64() {
             const canvas = document.createElement('canvas');
             canvas.width = 192; canvas.height = 192;
             const ctx = canvas.getContext('2d');
@@ -884,9 +640,10 @@ flowchart TB
             ctx.fillText('\uf4be', 96, 96);
             return canvas.toDataURL('image/png');
         }
-        const iconDataUrl = generateIcon();
+        const iconDataUrl = generateIconBase64();
         document.getElementById('favicon').href = iconDataUrl;
         document.getElementById('appleIcon').href = iconDataUrl;
+
         const manifest = {
             name: 'SplitMate UML',
             short_name: 'SplitMate',
@@ -896,12 +653,148 @@ flowchart TB
             theme_color: '#6c3ce0',
             icons: [{ src: iconDataUrl, sizes: '192x192', type: 'image/png' }]
         };
-        const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-        document.getElementById('manifestLink').href = URL.createObjectURL(blob);
-        if ('serviceWorker' in navigator) {
-            const swCode = `self.addEventListener('install',e=>{e.waitUntil(caches.open('splitmate-v1').then(c=>c.addAll(['./'])))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});`;
-            navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})));
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        const manifestUrl = URL.createObjectURL(manifestBlob);
+        document.getElementById('manifestLink').href = manifestUrl;
+
+        // ============ Mermaid ============
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Poppins, Cairo, sans-serif',
+        });
+        async function renderDiagrams() {
+            const elements = document.querySelectorAll('.mermaid');
+            for (const el of elements) {
+                try { await mermaid.run({ nodes: [el] }); } catch (e) {}
+                const cont = el.closest('.zoom-container');
+                if (cont) {
+                    const spin = cont.querySelector('.spinner-container');
+                    if (spin) spin.classList.add('hidden');
+                }
+            }
         }
+        window.addEventListener('load', renderDiagrams);
+
+        // ============ Navigation ============
+        const homeSection = document.getElementById('home');
+        const diagramSections = document.querySelectorAll('.diagram-section');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const sidebar = document.getElementById('sidebar');
+
+        function showSection(targetId) {
+            homeSection.classList.remove('active');
+            diagramSections.forEach(s => s.classList.remove('active'));
+            if (targetId === 'home') homeSection.classList.add('active');
+            else document.getElementById(targetId)?.classList.add('active');
+            navLinks.forEach(l => l.classList.remove('active'));
+            const active = document.querySelector(`.sidebar-nav a[data-target="${targetId}"]`);
+            if (active) active.classList.add('active');
+            if (window.innerWidth <= 768) sidebar.classList.remove('open');
+        }
+        navLinks.forEach(link => link.addEventListener('click', e => {
+            e.preventDefault();
+            showSection(link.dataset.target);
+        }));
+        document.getElementById('homeLink').addEventListener('click', e => {
+            e.preventDefault();
+            showSection('home');
+        });
+        document.getElementById('navbarMenuBtn').addEventListener('click', () => sidebar.classList.toggle('open'));
+
+        // Collapse, Copy, Toast
+        function toggleCard(h) { h.closest('.diagram-card').classList.toggle('collapsed'); }
+        function copyCode(id) {
+            const pre = document.getElementById(id);
+            if (pre) navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
+                const t = document.getElementById('toast');
+                t.textContent = 'Code copie !';
+                t.classList.add('show');
+                clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2500);
+            });
+        }
+
+        // Zoom & Pan
+        function setupZoomPan(container) {
+            let scale = 1, panX = 0, panY = 0, dragging = false, sx, sy, lx, ly;
+            const el = container;
+            function apply() {
+                const svg = el.querySelector('svg');
+                if (svg) { svg.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`; svg.style.transformOrigin = '0 0'; }
+            }
+            el.addEventListener('wheel', e => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const ns = Math.min(3, Math.max(0.3, scale * delta));
+                const rect = el.getBoundingClientRect();
+                const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+                const sx = (mx - panX) / scale, sy = (my - panY) / scale;
+                panX = mx - sx * ns; panY = my - sy * ns;
+                scale = ns; apply();
+            });
+            el.addEventListener('mousedown', e => {
+                dragging = true; sx = e.clientX; sy = e.clientY; lx = panX; ly = panY; el.classList.add('dragging');
+            });
+            window.addEventListener('mousemove', e => {
+                if (!dragging) return;
+                panX = lx + (e.clientX - sx); panY = ly + (e.clientY - sy); apply();
+            });
+            window.addEventListener('mouseup', () => { dragging = false; el.classList.remove('dragging'); });
+            // Touch (simplified)
+            let initDist, initScale;
+            el.addEventListener('touchstart', e => {
+                const t = [...e.touches];
+                if (t.length === 1) { dragging = true; sx = t[0].clientX; sy = t[0].clientY; lx = panX; ly = panY; }
+                else if (t.length === 2) { dragging = false; initDist = Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); initScale = scale; }
+            });
+            el.addEventListener('touchmove', e => {
+                const t = [...e.touches];
+                if (t.length === 1 && dragging) { panX = lx + (t[0].clientX - sx); panY = ly + (t[0].clientY - sy); apply(); }
+                else if (t.length === 2) {
+                    const dist = Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY);
+                    const ns = Math.min(3, Math.max(0.3, initScale * (dist / initDist)));
+                    const rect = el.getBoundingClientRect();
+                    const mx = (t[0].clientX+t[1].clientX)/2 - rect.left, my = (t[0].clientY+t[1].clientY)/2 - rect.top;
+                    const sx = (mx - panX) / scale, sy = (my - panY) / scale;
+                    panX = mx - sx * ns; panY = my - sy * ns;
+                    scale = ns; apply();
+                }
+            });
+            el.addEventListener('touchend', () => { dragging = false; });
+        }
+        document.querySelectorAll('.zoom-container').forEach(c => setupZoomPan(c));
+
+        // Fullscreen
+        const modal = document.getElementById('fullscreenModal');
+        const modalZoom = document.getElementById('modalZoomContainer');
+        function openFullscreen(key) {
+            const src = document.getElementById('zoom-' + key);
+            if (!src) return;
+            const svg = src.querySelector('svg');
+            if (svg) {
+                modalZoom.innerHTML = '';
+                modalZoom.appendChild(svg.cloneNode(true));
+                const spin = document.createElement('div'); spin.className = 'spinner-container hidden'; spin.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                modalZoom.appendChild(spin);
+            }
+            modal.classList.add('active');
+            modalZoom.style.transform = ''; const s = modalZoom.querySelector('svg'); if (s) s.style.transform = '';
+        }
+        document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('active'));
+        document.getElementById('modalZoomIn').addEventListener('click', () => {
+            const s = modalZoom.querySelector('svg'); if (!s) return;
+            let cur = parseFloat(s.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
+            s.style.transform = `scale(${Math.min(3, cur*1.2)})`;
+        });
+        document.getElementById('modalZoomOut').addEventListener('click', () => {
+            const s = modalZoom.querySelector('svg'); if (!s) return;
+            let cur = parseFloat(s.style.transform.match(/scale\(([^)]+)\)/)?.[1] || 1);
+            s.style.transform = `scale(${Math.max(0.3, cur/1.2)})`;
+        });
+        document.getElementById('modalZoomReset').addEventListener('click', () => {
+            const s = modalZoom.querySelector('svg'); if (s) s.style.transform = 'scale(1)';
+        });
     </script>
 </body>
 </html>
