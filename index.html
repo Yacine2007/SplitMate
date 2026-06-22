@@ -507,7 +507,7 @@ graph TD
                 </div>
             </div>
 
-            <!-- ER Diagram -->
+            <!-- ER Diagram (corrigé) -->
             <div class="diagram-section" id="er">
                 <div class="diagram-card" id="erCard">
                     <div class="diagram-card-header" onclick="toggleCard(this)">
@@ -526,7 +526,7 @@ erDiagram
     UTILISATEUR ||--o{ GROUPE : "appartient"
     GROUPE ||--o{ DEPENSE : "contient"
     UTILISATEUR ||--o{ PAIEMENT : "effectue"
-    DEPENSE ||--o{ PAIEMENT : "règle"
+    DEPENSE ||--o{ PAIEMENT : "regle"
 
     UTILISATEUR {
         string id
@@ -646,6 +646,7 @@ graph TD
         document.getElementById('favicon192').href = i192;
         document.getElementById('favicon512').href = i512;
 
+        // إنشاء المانفست مباشرةً كـ data URI لتفادي مشاكل Blob URL
         const manifest = {
             name: 'SplitMate UML',
             short_name: 'SplitMate',
@@ -653,10 +654,13 @@ graph TD
             display: 'standalone',
             background_color: '#6c3ce0',
             theme_color: '#6c3ce0',
-            icons: [{ src: i192, sizes: '192x192', type: 'image/png' }, { src: i512, sizes: '512x512', type: 'image/png' }]
+            icons: [
+                { src: i192, sizes: '192x192', type: 'image/png' },
+                { src: i512, sizes: '512x512', type: 'image/png' }
+            ]
         };
-        const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-        document.getElementById('manifestLink').href = URL.createObjectURL(manifestBlob);
+        const manifestDataUri = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+        document.getElementById('manifestLink').href = manifestDataUri;
 
         // تسجيل Service Worker بالطريقة الصحيحة
         if ('serviceWorker' in navigator) {
@@ -685,7 +689,6 @@ graph TD
             deferredPrompt = null;
         });
 
-        // Masquer le bouton si déjà installé
         window.addEventListener('appinstalled', () => {
             installBtn.style.display = 'none';
         });
@@ -698,7 +701,7 @@ graph TD
         async function renderDiagrams() {
             const elements = document.querySelectorAll('.mermaid');
             for (const el of elements) {
-                try { await mermaid.run({ nodes: [el] }); } catch(e){}
+                try { await mermaid.run({ nodes: [el] }); } catch(e) { console.error('Mermaid error:', e); }
                 const cont = el.closest('.zoom-container');
                 if(cont) { const spin = cont.querySelector('.spinner-container'); if(spin) spin.classList.add('hidden'); }
             }
