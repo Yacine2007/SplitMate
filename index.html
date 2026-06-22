@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>SplitMate – Diagrammes UML</title>
-    <!-- PWA Meta -->
+
+    <!-- PWA Essentials -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c3ce0">
-    <link rel="apple-touch-icon" sizes="192x192" href="" id="appleIcon">
-    <link rel="icon" type="image/png" sizes="192x192" href="" id="favicon">
+    <link rel="apple-touch-icon" sizes="180x180" href="" id="appleIcon180">
+    <link rel="apple-touch-icon" sizes="192x192" href="" id="appleIcon192">
+    <link rel="icon" type="image/png" sizes="192x192" href="" id="favicon192">
+    <link rel="icon" type="image/png" sizes="512x512" href="" id="favicon512">
     <link rel="manifest" href="" id="manifestLink">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Mermaid JS -->
@@ -625,24 +629,30 @@ flowchart TB
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============ PWA Icon & Manifest (data URIs, no SW needed) ============
-        function generateIconBase64() {
+        // ============ PWA Icon Generation & Manifest ============
+        function generateIcon(size) {
             const canvas = document.createElement('canvas');
-            canvas.width = 192; canvas.height = 192;
+            canvas.width = size; canvas.height = size;
             const ctx = canvas.getContext('2d');
-            const grad = ctx.createLinearGradient(0,0,192,192);
+            const grad = ctx.createLinearGradient(0,0,size,size);
             grad.addColorStop(0, '#8b5cf6'); grad.addColorStop(1, '#f59e0b');
             ctx.fillStyle = grad;
-            ctx.beginPath(); ctx.arc(96,96,80,0,Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(size/2, size/2, size*0.42, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 80px "Font Awesome 5 Free","Poppins",sans-serif';
+            ctx.font = `bold ${size*0.42}px "Font Awesome 5 Free","Poppins",sans-serif`;
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('\uf4be', 96, 96);
+            ctx.fillText('\uf4be', size/2, size/2);
             return canvas.toDataURL('image/png');
         }
-        const iconDataUrl = generateIconBase64();
-        document.getElementById('favicon').href = iconDataUrl;
-        document.getElementById('appleIcon').href = iconDataUrl;
+
+        const icon192 = generateIcon(192);
+        const icon512 = generateIcon(512);
+        const icon180 = generateIcon(180); // Apple touch icon
+
+        document.getElementById('appleIcon180').href = icon180;
+        document.getElementById('appleIcon192').href = icon192;
+        document.getElementById('favicon192').href = icon192;
+        document.getElementById('favicon512').href = icon512;
 
         const manifest = {
             name: 'SplitMate UML',
@@ -651,11 +661,37 @@ flowchart TB
             display: 'standalone',
             background_color: '#6c3ce0',
             theme_color: '#6c3ce0',
-            icons: [{ src: iconDataUrl, sizes: '192x192', type: 'image/png' }]
+            icons: [
+                { src: icon192, sizes: '192x192', type: 'image/png' },
+                { src: icon512, sizes: '512x512', type: 'image/png' }
+            ]
         };
         const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
         const manifestUrl = URL.createObjectURL(manifestBlob);
         document.getElementById('manifestLink').href = manifestUrl;
+
+        // Register Service Worker with proper scope
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'splitmate-v1';
+                const urlsToCache = ['./'];
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+                    );
+                });
+                self.addEventListener('fetch', event => {
+                    event.respondWith(
+                        caches.match(event.request).then(response => response || fetch(event.request))
+                    );
+                });
+            `;
+            const swBlob = new Blob([swCode], {type: 'application/javascript'});
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl, { scope: '/' })
+                .then(reg => console.log('Service Worker registered', reg))
+                .catch(err => console.error('SW registration failed', err));
+        }
 
         // ============ Mermaid ============
         mermaid.initialize({
@@ -741,7 +777,7 @@ flowchart TB
                 panX = lx + (e.clientX - sx); panY = ly + (e.clientY - sy); apply();
             });
             window.addEventListener('mouseup', () => { dragging = false; el.classList.remove('dragging'); });
-            // Touch (simplified)
+            // Touch
             let initDist, initScale;
             el.addEventListener('touchstart', e => {
                 const t = [...e.touches];
