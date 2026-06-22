@@ -18,8 +18,7 @@
     <!-- Font Awesome (CDN, cached by service worker) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Mermaid JS -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -293,9 +292,9 @@
             <a href="#" class="nav-link active" data-target="home"><i class="fa-solid fa-house"></i> Accueil</a>
             <a href="#" class="nav-link" data-target="use-case"><i class="fa-solid fa-person-circle-check"></i> Cas d'utilisation</a>
             <a href="#" class="nav-link" data-target="class"><i class="fa-solid fa-cubes"></i> Classes</a>
-            <a href="#" class="nav-link" data-target="sequence"><i class="fa-solid fa-arrows-spin"></i> Sequence</a>
-            <a href="#" class="nav-link" data-target="activity"><i class="fa-solid fa-diagram-project"></i> Activite</a>
-            <a href="#" class="nav-link" data-target="er"><i class="fa-solid fa-database"></i> Entite-Relation</a>
+            <a href="#" class="nav-link" data-target="sequence"><i class="fa-solid fa-arrows-spin"></i> Séquence</a>
+            <a href="#" class="nav-link" data-target="activity"><i class="fa-solid fa-diagram-project"></i> Activité</a>
+            <a href="#" class="nav-link" data-target="er"><i class="fa-solid fa-database"></i> Entité-Relation</a>
             <a href="#" class="nav-link" data-target="component"><i class="fa-solid fa-server"></i> Composants</a>
         </nav>
     </aside>
@@ -309,7 +308,7 @@
                     <div class="app-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
                     <div class="home-title">
                         <h1>SplitMate</h1>
-                        <p>Application de partage equitable des frais entre amis, couples et groupes.</p>
+                        <p>Application de partage équitable des frais entre amis, couples et groupes.</p>
                         <div class="install-btn-container">
                             <button class="install-btn" id="internalInstallBtn" style="display:none;">
                                 <i class="fa-solid fa-download"></i> تثبيت التطبيق
@@ -320,44 +319,291 @@
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon icon-use-case"><i class="fa-solid fa-user-plus"></i></div>
-                        <h3>Invitation securisee</h3>
-                        <p>Ajoutez vos amis via un code de verification 2FA.</p>
+                        <h3>Invitation sécurisée</h3>
+                        <p>Ajoutez vos amis via un code de vérification 2FA.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#fce7f3;color:#db2777;"><i class="fa-solid fa-calculator"></i></div>
                         <h3>Division automatique</h3>
-                        <p>Chaque depense est divisee equitablement.</p>
+                        <p>Chaque dépense est divisée équitablement.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#dbeafe;color:#2563eb;"><i class="fa-solid fa-credit-card"></i></div>
                         <h3>Paiement en ligne</h3>
-                        <p>Reglez votre part via Stripe ou CIB.</p>
+                        <p>Réglez votre part via Stripe ou CIB.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-wallet"></i></div>
                         <h3>Portefeuille commun</h3>
-                        <p>Suivez le solde partage du groupe.</p>
+                        <p>Suivez le solde partagé du groupe.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#d1fae5;color:#059669;"><i class="fa-solid fa-utensils"></i></div>
-                        <h3>Decouvrez des lieux</h3>
-                        <p>Restaurants, cinemas et activites.</p>
+                        <h3>Découvrez des lieux</h3>
+                        <p>Restaurants, cinémas et activités.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" style="background:#e0e7ff;color:#4f46e5;"><i class="fa-solid fa-bell"></i></div>
                         <h3>Notifications</h3>
-                        <p>Alertes en temps reel.</p>
+                        <p>Alertes en temps réel.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Diagrams (abbreviated for display, but keep all previous diagrams) -->
-            <div class="diagram-section" id="use-case"><div class="diagram-card">...</div></div>
-            <div class="diagram-section" id="class"><div class="diagram-card">...</div></div>
-            <div class="diagram-section" id="sequence"><div class="diagram-card">...</div></div>
-            <div class="diagram-section" id="activity"><div class="diagram-card">...</div></div>
-            <div class="diagram-section" id="er"><div class="diagram-card">...</div></div>
-            <div class="diagram-section" id="component"><div class="diagram-card">...</div></div>
+            <!-- Diagrammes UML -->
+            <!-- Use Case -->
+            <div class="diagram-section" id="use-case">
+                <div class="diagram-card" id="useCaseCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-use-case"><i class="fa-solid fa-person-circle-check"></i></div>
+                        <div class="header-info"><h3>Diagramme de cas d'utilisation</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('useCaseCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomUseCase">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="useCaseCode">
+graph TD
+    A[Utilisateur] -->|Créer un groupe| B((Groupe))
+    A -->|Ajouter une dépense| C((Dépense))
+    A -->|Inviter des amis| D((Invitation))
+    A -->|Payer sa part| E((Paiement))
+    E -->|Stripe| F[Passerelle de paiement]
+    B -->|Calcule les soldes| G((Solde))
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Acteurs : Utilisateur, Système de paiement
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Diagram -->
+            <div class="diagram-section" id="class">
+                <div class="diagram-card" id="classCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-class"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="header-info"><h3>Diagramme de classes</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('classCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomClass">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="classCode">
+classDiagram
+    class Utilisateur {
+        +String id
+        +String nom
+        +String email
+        +String motDePasse
+        +créerGroupe()
+        +payer()
+    }
+    class Groupe {
+        +String id
+        +String nom
+        +Date dateCréation
+        +ajouterMembre()
+        +calculerSoldes()
+    }
+    class Dépense {
+        +String id
+        +Float montant
+        +String description
+        +Date date
+        +diviser()
+    }
+    class Paiement {
+        +String id
+        +Float montant
+        +String statut
+        +traiter()
+    }
+    Utilisateur "1" --> "*" Groupe : appartient
+    Groupe "1" --> "*" Dépense : contient
+    Utilisateur "1" --> "*" Paiement : effectue
+    Dépense "1" --> "*" Paiement : réglée par
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Classes principales de l'application
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sequence Diagram -->
+            <div class="diagram-section" id="sequence">
+                <div class="diagram-card" id="seqCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-sequence"><i class="fa-solid fa-arrows-spin"></i></div>
+                        <div class="header-info"><h3>Diagramme de séquence</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('seqCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomSeq">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="seqCode">
+sequenceDiagram
+    participant U as Utilisateur
+    participant A as App (Frontend)
+    participant S as Serveur (API)
+    participant DB as Base de données
+    U->>A: Ajouter une dépense (montant, description)
+    A->>S: POST /expenses
+    S->>DB: Insérer dépense
+    DB-->>S: Succès
+    S-->>A: Dépense créée
+    A->>U: Afficher confirmation
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Scénario : ajout d'une dépense
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Diagram -->
+            <div class="diagram-section" id="activity">
+                <div class="diagram-card" id="actCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-activity"><i class="fa-solid fa-diagram-project"></i></div>
+                        <div class="header-info"><h3>Diagramme d'activité</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('actCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomAct">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="actCode">
+graph TD
+    Démarrer --> SaisirDépense[Saisir le montant et la description]
+    SaisirDépense --> ChoisirGroupe[Choisir le groupe]
+    ChoisirGroupe --> Diviser[Diviser la dépense automatiquement]
+    Diviser --> Notifier[Notifier les membres]
+    Notifier --> AttendrePaiement[Attendre les paiements]
+    AttendrePaiement -->|Paiements reçus| Clôturer[Clôturer la dépense]
+    AttendrePaiement -->|Relance| Relancer[Relancer les retardataires]
+    Relancer --> AttendrePaiement
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Processus de partage d'une dépense
+                    </div>
+                </div>
+            </div>
+
+            <!-- ER Diagram -->
+            <div class="diagram-section" id="er">
+                <div class="diagram-card" id="erCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-er"><i class="fa-solid fa-database"></i></div>
+                        <div class="header-info"><h3>Diagramme Entité-Relation</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('erCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomEr">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="erCode">
+erDiagram
+    UTILISATEUR ||--o{ GROUPE : "appartient"
+    GROUPE ||--o{ DEPENSE : "contient"
+    UTILISATEUR ||--o{ PAIEMENT : "effectue"
+    DEPENSE ||--o{ PAIEMENT : "règle"
+
+    UTILISATEUR {
+        string id
+        string nom
+        string email
+        string mot_de_passe
+    }
+    GROUPE {
+        string id
+        string nom
+        date date_creation
+    }
+    DEPENSE {
+        string id
+        float montant
+        string description
+        date date
+    }
+    PAIEMENT {
+        string id
+        float montant
+        string statut
+        date date_paiement
+    }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Structure de la base de données
+                    </div>
+                </div>
+            </div>
+
+            <!-- Component Diagram -->
+            <div class="diagram-section" id="component">
+                <div class="diagram-card" id="compCard">
+                    <div class="diagram-card-header" onclick="toggleCard(this)">
+                        <div class="diagram-icon icon-component"><i class="fa-solid fa-server"></i></div>
+                        <div class="header-info"><h3>Diagramme de composants</h3></div>
+                        <div class="header-actions">
+                            <button class="btn-icon" onclick="copyCode('compCode')"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down collapse-arrow"></i>
+                    </div>
+                    <div class="diagram-card-body">
+                        <div class="zoom-container" id="zoomComp">
+                            <div class="spinner-container"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            <pre class="mermaid" id="compCode">
+graph TD
+    subgraph Frontend
+        A[Application Mobile]
+        B[Interface Web]
+    end
+    subgraph Backend
+        C[API REST]
+        D[Service d'authentification]
+        E[Service de paiement]
+    end
+    subgraph Externe
+        F[Stripe]
+        G[CIB]
+    end
+    A --> C
+    B --> C
+    C --> D
+    C --> E
+    E --> F
+    E --> G
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="diagram-card-footer">
+                        <i class="fa-solid fa-info-circle"></i> Architecture globale du système
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -412,16 +658,11 @@
         const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
         document.getElementById('manifestLink').href = URL.createObjectURL(manifestBlob);
 
-        // Service Worker (inline)
-        const swCode = `
-            const CACHE = 'splitmate-v1';
-            const urlsToCache = ['./'];
-            self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(urlsToCache))); });
-            self.addEventListener('fetch', e => { e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); });
-        `;
-        const swDataUrl = 'data:application/javascript;base64,' + btoa(swCode);
+        // تسجيل Service Worker بالطريقة الصحيحة
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(swDataUrl, { scope: '/' }).catch(() => {});
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Service Worker enregistré', reg))
+                .catch(err => console.error('Erreur SW:', err));
         }
 
         // ============ Install Button Logic ============
@@ -444,7 +685,7 @@
             deferredPrompt = null;
         });
 
-        // Hide button if already installed
+        // Masquer le bouton si déjà installé
         window.addEventListener('appinstalled', () => {
             installBtn.style.display = 'none';
         });
@@ -487,7 +728,7 @@
         function copyCode(id) {
             const pre = document.getElementById(id);
             if(pre) navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
-                const t = document.getElementById('toast'); t.textContent = 'Code copie !'; t.classList.add('show');
+                const t = document.getElementById('toast'); t.textContent = 'Code copié !'; t.classList.add('show');
                 setTimeout(() => t.classList.remove('show'), 2500);
             });
         }
