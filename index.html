@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>SplitMate – Diagrammes UML</title>
 
-    <!-- PWA Essentials -->
+    <!-- PWA Essentials (inline icons & manifest via blob) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c3ce0">
@@ -54,36 +54,20 @@
             background: var(--surface); box-shadow: 0 2px 12px rgba(0,0,0,0.06);
             z-index: 1001; display: flex; align-items: center; padding: 0 20px; gap: 12px;
         }
-        .navbar .menu-btn {
-            background: none; border: none; font-size: 1.4rem; cursor: pointer;
-            color: var(--text); width: 40px; height: 40px; display: flex; align-items: center;
-            justify-content: center; border-radius: 10px;
-        }
-        .navbar-brand { display: flex; align-items: center; gap: 8px; font-weight: 700;
-            font-size: 1.2rem; color: var(--primary); text-decoration: none;
-        }
+        .navbar .menu-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
+        .navbar-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; color: var(--primary); text-decoration: none; }
         .sidebar {
             position: fixed; top: var(--navbar-height); left: 0; width: var(--sidebar-width);
-            height: calc(100vh - var(--navbar-height));
-            background: linear-gradient(180deg, #1a1035 0%, #0d0820 100%);
+            height: calc(100vh - var(--navbar-height)); background: linear-gradient(180deg, #1a1035 0%, #0d0820 100%);
             color: #fff; z-index: 1000; overflow-y: auto; box-shadow: 4px 0 30px rgba(0,0,0,0.3);
             transition: transform 0.3s; display: flex; flex-direction: column; transform: translateX(0);
         }
         .sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
         .sidebar-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
-        .sidebar-logo .icon-circle { width: 44px; height: 44px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
-        }
-        .sidebar-logo h2 { font-size: 1.4rem; font-weight: 700;
-            background: linear-gradient(135deg, #fff, #d4c5f9);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .sidebar-subtitle { font-size: 0.75rem; color: rgba(255,255,255,0.55); }
+        .sidebar-logo .icon-circle { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-light), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .sidebar-logo h2 { font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, #fff, #d4c5f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
-        .sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px;
-            color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500;
-        }
+        .sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
         .sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; }
         .sidebar-nav a.active { background: rgba(139,92,246,0.3); color: #fff; font-weight: 600; }
         .main-area { display: flex; margin-left: var(--sidebar-width); min-height: calc(100vh - var(--navbar-height)); transition: margin-left 0.3s; }
@@ -91,78 +75,40 @@
         .home-section, .diagram-section { display: none; }
         .home-section.active, .diagram-section.active { display: block; }
         .home-header { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-        .home-header .app-icon { width: 80px; height: 80px; border-radius: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
-            color: #fff; box-shadow: 0 8px 24px rgba(108,60,224,0.4);
-        }
+        .home-header .app-icon { width: 80px; height: 80px; border-radius: 20px; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #fff; box-shadow: 0 8px 24px rgba(108,60,224,0.4); }
         .home-title h1 { font-size: 2rem; font-weight: 700; }
         .home-title p { font-size: 1rem; color: var(--text-light); max-width: 600px; margin-top: 8px; }
 
         .install-btn {
-            background: linear-gradient(135deg, #6c3ce0, #8b5cf6);
-            color: #fff;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 16px rgba(108,60,224,0.3);
-            margin-top: 16px;
-            transition: transform 0.2s;
+            background: linear-gradient(135deg, #6c3ce0, #8b5cf6); color: #fff; border: none; padding: 14px 28px;
+            border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center;
+            gap: 10px; box-shadow: 0 4px 16px rgba(108,60,224,0.3); margin-top: 16px; transition: transform 0.2s;
         }
         .install-btn:hover { transform: translateY(-2px); }
-        .install-btn:disabled { opacity: 0.5; pointer-events: none; }
-
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 32px; }
-        .feature-card { background: var(--surface); border-radius: var(--radius); padding: 20px;
-            box-shadow: var(--shadow); border: 1px solid var(--border);
-        }
-        .feature-icon { width: 48px; height: 48px; border-radius: 12px; display: flex;
-            align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 12px;
-        }
-
+        .feature-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .feature-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 12px; }
         .diagram-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border); }
-        .diagram-card-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px;
-            border-bottom: 1px solid var(--border); background: #faf9fe; cursor: pointer;
-        }
+        .diagram-card-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border); background: #faf9fe; cursor: pointer; }
         .diagram-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        .icon-use-case { background: #ede9fe; color: #7c3aed; }
-        .icon-class { background: #fce7f3; color: #db2777; }
-        .icon-sequence { background: #dbeafe; color: #2563eb; }
-        .icon-activity { background: #fef3c7; color: #d97706; }
-        .icon-er { background: #d1fae5; color: #059669; }
-        .icon-component { background: #e0e7ff; color: #4f46e5; }
+        .icon-use-case { background: #ede9fe; color: #7c3aed; } .icon-class { background: #fce7f3; color: #db2777; } .icon-sequence { background: #dbeafe; color: #2563eb; } .icon-activity { background: #fef3c7; color: #d97706; } .icon-er { background: #d1fae5; color: #059669; } .icon-component { background: #e0e7ff; color: #4f46e5; }
         .header-actions { margin-left: auto; display: flex; gap: 6px; }
-        .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
-            background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
+        .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .collapse-arrow { transition: transform 0.2s; }
         .diagram-card.collapsed .collapse-arrow { transform: rotate(-90deg); }
-        .diagram-card-body { padding: 10px 6px 14px; overflow: hidden; display: flex; justify-content: center;
-            background: #fdfdfe; min-height: 200px; position: relative;
-        }
+        .diagram-card-body { padding: 10px 6px 14px; overflow: hidden; display: flex; justify-content: center; background: #fdfdfe; min-height: 200px; position: relative; }
         .diagram-card.collapsed .diagram-card-body { display: none; }
         .diagram-card-footer { padding: 8px 16px; border-top: 1px solid var(--border); font-size: 0.7rem; color: var(--text-light); background: #faf9fe; }
         .zoom-container { width: 100%; height: 100%; cursor: grab; transform-origin: 0 0; }
         .zoom-container svg { width: 100%; height: auto; display: block; }
         .spinner-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5; color: var(--primary); font-size: 2rem; }
         .spinner-container.hidden { display: none; }
-        .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center;
-        }
+        .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
         .fullscreen-modal.active { display: flex; }
         .modal-content { width: 90vw; height: 90vh; background: #fff; border-radius: 12px; position: relative; display: flex; justify-content: center; align-items: center; }
         .modal-close { position: absolute; top: 16px; right: 16px; z-index: 10; }
         .modal-zoom-controls { position: absolute; bottom: 16px; right: 16px; z-index: 10; display: flex; gap: 8px; }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
-            background: #1a1035; color: #fff; padding: 10px 22px; border-radius: 24px;
-            z-index: 9999; opacity: 0; transition: all 0.4s; pointer-events: none; white-space: nowrap;
-        }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1035; color: #fff; padding: 10px 22px; border-radius: 24px; z-index: 9999; opacity: 0; transition: all 0.4s; pointer-events: none; white-space: nowrap; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         @media (max-width: 768px) {
@@ -208,7 +154,7 @@
                     <div class="home-title">
                         <h1>SplitMate</h1>
                         <p>Application de partage equitable des frais entre amis, couples et groupes.</p>
-                        <button class="install-btn" id="installAppButton" style="display: none;">
+                        <button class="install-btn" id="installAppButton" style="display:none;">
                             <i class="fa-solid fa-download"></i> تثبيت التطبيق
                         </button>
                     </div>
@@ -282,10 +228,10 @@
         const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
         document.getElementById('manifestLink').href = URL.createObjectURL(manifestBlob);
 
-        // ============ SERVICE WORKER (inline via Blob, scope root) ============
+        // ============ SERVICE WORKER (Blob URL, scope = '/') ============
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE = 'splitmate-v1';
+                const CACHE = 'splitmate-v2';
                 self.addEventListener('install', e => {
                     e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./'])));
                 });
@@ -293,12 +239,14 @@
                     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
                 });
             `;
-            const swBlob = new Blob([swCode], {type:'application/javascript'});
+            const swBlob = new Blob([swCode], {type: 'application/javascript'});
             const swUrl = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swUrl, { scope: '/' }).then(() => console.log('SW ok')).catch(() => {});
+            navigator.serviceWorker.register(swUrl, { scope: '/' })
+                .then(reg => console.log('✅ Service Worker registered'))
+                .catch(err => console.error('❌ SW registration failed', err));
         }
 
-        // ============ INSTALL BUTTON ============
+        // ============ INSTALL BUTTON LOGIC ============
         let deferredPrompt;
         const installBtn = document.getElementById('installAppButton');
 
@@ -306,12 +254,14 @@
             e.preventDefault();
             deferredPrompt = e;
             installBtn.style.display = 'inline-flex';
+            console.log('🔥 beforeinstallprompt fired – install button shown');
         });
 
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) return;
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User install choice: ${outcome}`);
             if (outcome === 'accepted') {
                 installBtn.style.display = 'none';
             }
@@ -320,14 +270,24 @@
 
         window.addEventListener('appinstalled', () => {
             installBtn.style.display = 'none';
+            console.log('✅ App installed successfully');
         });
 
-        // Hide if already installed
+        // Hide if already in standalone mode
         if (window.matchMedia('(display-mode: standalone)').matches) {
             installBtn.style.display = 'none';
         }
 
-        // ============ MERMAID & UI ============
+        // Fallback: show button after 5 seconds if prompt not triggered
+        setTimeout(() => {
+            if (!deferredPrompt && !window.matchMedia('(display-mode: standalone)').matches) {
+                installBtn.style.display = 'inline-flex';
+                installBtn.innerHTML = '<i class="fa-solid fa-download"></i> تثبيت التطبيق';
+                console.log('Fallback install button shown');
+            }
+        }, 5000);
+
+        // ============ MERMAID & NAVIGATION ============
         mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose', fontFamily: 'Poppins, Cairo, sans-serif' });
         window.addEventListener('load', async () => {
             const els = document.querySelectorAll('.mermaid');
