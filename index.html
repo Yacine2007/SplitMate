@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>SplitMate – Diagrammes UML</title>
 
-    <!-- PWA Essentials (inline icons & manifest via blob) -->
+    <!-- PWA Essentials -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c3ce0">
@@ -193,7 +193,7 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============ PWA ICONS & MANIFEST ============
+        // ============ PWA ICONS & MANIFEST (dynamic base URL) ============
         function generateIcon(size) {
             const canvas = document.createElement('canvas');
             canvas.width = size; canvas.height = size;
@@ -216,37 +216,43 @@
         document.getElementById('favicon192').href = i192;
         document.getElementById('favicon512').href = i512;
 
+        // Get base path for GitHub Pages (e.g., /repo-name/)
+        const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) || '.';
         const manifest = {
             name: 'SplitMate UML',
             short_name: 'SplitMate',
-            start_url: '.',
+            start_url: basePath,
             display: 'standalone',
             background_color: '#6c3ce0',
             theme_color: '#6c3ce0',
-            icons: [{ src: i192, sizes: '192x192', type: 'image/png' }, { src: i512, sizes: '512x512', type: 'image/png' }]
+            icons: [
+                { src: i192, sizes: '192x192', type: 'image/png' },
+                { src: i512, sizes: '512x512', type: 'image/png' }
+            ]
         };
         const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
         document.getElementById('manifestLink').href = URL.createObjectURL(manifestBlob);
 
-        // ============ SERVICE WORKER (Blob URL, scope = '/') ============
+        // ============ SERVICE WORKER (scope = basePath) ============
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE = 'splitmate-v2';
+                const CACHE = 'splitmate-v3';
+                const BASE = '${basePath}';
                 self.addEventListener('install', e => {
-                    e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./'])));
+                    e.waitUntil(caches.open(CACHE).then(c => c.addAll([BASE + '/', BASE + '/index.html'])));
                 });
                 self.addEventListener('fetch', e => {
                     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
                 });
             `;
-            const swBlob = new Blob([swCode], {type: 'application/javascript'});
+            const swBlob = new Blob([swCode], {type:'application/javascript'});
             const swUrl = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swUrl, { scope: '/' })
-                .then(reg => console.log('✅ Service Worker registered'))
-                .catch(err => console.error('❌ SW registration failed', err));
+            navigator.serviceWorker.register(swUrl, { scope: basePath })
+                .then(reg => console.log('✅ SW registered with scope:', reg.scope))
+                .catch(err => console.error('SW registration error', err));
         }
 
-        // ============ INSTALL BUTTON LOGIC ============
+        // ============ INSTALL BUTTON ============
         let deferredPrompt;
         const installBtn = document.getElementById('installAppButton');
 
@@ -254,14 +260,12 @@
             e.preventDefault();
             deferredPrompt = e;
             installBtn.style.display = 'inline-flex';
-            console.log('🔥 beforeinstallprompt fired – install button shown');
         });
 
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) return;
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User install choice: ${outcome}`);
             if (outcome === 'accepted') {
                 installBtn.style.display = 'none';
             }
@@ -270,20 +274,16 @@
 
         window.addEventListener('appinstalled', () => {
             installBtn.style.display = 'none';
-            console.log('✅ App installed successfully');
         });
 
-        // Hide if already in standalone mode
         if (window.matchMedia('(display-mode: standalone)').matches) {
             installBtn.style.display = 'none';
         }
 
-        // Fallback: show button after 5 seconds if prompt not triggered
+        // Fallback after 5s
         setTimeout(() => {
             if (!deferredPrompt && !window.matchMedia('(display-mode: standalone)').matches) {
                 installBtn.style.display = 'inline-flex';
-                installBtn.innerHTML = '<i class="fa-solid fa-download"></i> تثبيت التطبيق';
-                console.log('Fallback install button shown');
             }
         }, 5000);
 
